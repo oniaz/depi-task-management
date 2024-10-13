@@ -18,16 +18,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-    FaArrowDown,
-    FaArrowLeft,
-    FaArrowUp,
-    FaBriefcase,
-    FaCheckSquare,
-    FaSchool,
-    FaSquare,
-    FaUser,
-} from "react-icons/fa";
 
 export const columns = [
     {

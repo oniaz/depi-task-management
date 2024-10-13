@@ -3,6 +3,12 @@ import RootLayout from "./layouts/RootLayout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import { getTasks } from "./api/tasks";
+
+const tasksLoader = async () => {
+    const tasks = await getTasks();
+    return { tasks };
+};
 
 const router = createBrowserRouter([
     {
@@ -12,6 +18,7 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <HomePage />,
+                loader: tasksLoader,
             },
             {
                 path: "/login",
