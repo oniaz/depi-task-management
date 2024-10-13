@@ -20,6 +20,13 @@
             "status": "Done",
             "priority": "Medium",
             "category": "Personal"
+        },
+        {
+            "id": 3,
+            "title": "new task",
+            "status": "Done",
+            "priority": "Medium",
+            "category": "Personal"
         }
     ]
 }
