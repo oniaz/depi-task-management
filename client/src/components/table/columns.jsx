@@ -18,6 +18,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { StopwatchIcon } from "@radix-ui/react-icons";
+import { capitalize } from "../../lib/utils";
 
 export const columns = [
     {
@@ -28,7 +30,7 @@ export const columns = [
         accessorKey: "status",
         header: "Status",
         cell: ({ getValue }) => {
-            const status = getValue();
+            const status = capitalize(getValue());
             const StatusIcon = getStatusIcon(status);
 
             return (
@@ -43,7 +45,7 @@ export const columns = [
         accessorKey: "priority",
         header: "Priority",
         cell: ({ getValue }) => {
-            const priority = getValue();
+            const priority = capitalize(getValue());
             const PriorityIcon = getPriorityIcon(priority);
 
             return (
@@ -58,7 +60,7 @@ export const columns = [
         accessorKey: "category",
         header: "Category",
         cell: ({ getValue }) => {
-            const category = getValue();
+            const category = capitalize(getValue());
             const CategoryIcon = getCategoryIcon(category);
 
             return (
@@ -144,6 +146,10 @@ const getStatusIcon = (status) => {
     switch (status) {
         case "todo": {
             return Square;
+        }
+
+        case "in progress": {
+            return StopwatchIcon;
         }
 
         case "done": {
