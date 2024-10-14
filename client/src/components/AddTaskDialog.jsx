@@ -23,8 +23,7 @@ const addTaskDialog = () => {
                 <DialogHeader>
                     <DialogTitle>Add Task</DialogTitle>
                     <DialogDescription>
-                        Add tasks to specific users here. Click add when
-                        you&apos;re finished
+                        Add tasks here. Click add when you&apos;re finished
                     </DialogDescription>
                 </DialogHeader>
                 <AddTaskFrom />
