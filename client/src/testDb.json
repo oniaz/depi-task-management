@@ -10,14 +10,14 @@
         {
             "id": 2,
             "title": "Amr Amein yapping lecture",
-            "status": "Todo",
+            "status": "done",
             "priority": "Low",
             "category": "School"
         },
         {
             "id": 3,
             "title": "new task",
-            "status": "Done",
+            "status": "in progress",
             "priority": "Medium",
             "category": "Personal"
         },
