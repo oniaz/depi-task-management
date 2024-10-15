@@ -4,7 +4,7 @@ const User = require('../models/user');
 const Task = require('../models/task');
 
 // expects userID in req (passed from middelware)
-// // responds with all tasks created by the user (populated with users' names)
+// responds with all tasks created by the user (populated with users' names)
 const getAllTasks = async (req, res) => {
   try {
     ////////////// FOR TESTING!!!!!!!!!!!
@@ -65,7 +65,7 @@ const getAllTasks = async (req, res) => {
 // Unix Timestamp: 1697371800000
 // params: title (required), description (required), assignedTo (required), dueDate (required), priority (optional, default: 'medium'), category (required)
 // sets status to  'in progress'
-// // responds with created task (populated with users' names)
+// responds with created task (populated with users' names)
 const createTask = async (req, res) => {
   try {
     ////////////// FOR TESTING!!!!!!!!!!!
@@ -158,7 +158,7 @@ const createTask = async (req, res) => {
 
 // expects userID in req (passed from middelware)
 // expects task id passed as parameter :id
-// // responds with 1 task by id created by the user (populated with users' names)
+// responds with 1 task by id created by the user (populated with users' names)
 const getTask = async (req, res) => {
   try {
     ////////////// FOR TESTING!!!!!!!!!!!
@@ -182,10 +182,6 @@ const getTask = async (req, res) => {
 
 
     const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({ message: 'Missing required parameter: id' });
-    }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: 'Invalid format for task ID' });
@@ -227,6 +223,7 @@ const getTask = async (req, res) => {
 // expects userID in req (passed from middelware)
 // expects task id passed as parameter :id
 // deletes 1 task by id created by the user
+// responds with a success message
 const deleteTask = async (req, res) => {
   try {
     ////////////// FOR TESTING!!!!!!!!!!!
@@ -250,10 +247,6 @@ const deleteTask = async (req, res) => {
 
 
     const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({ message: 'Missing required parameter: id' });
-    }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: 'Invalid format for task ID' });

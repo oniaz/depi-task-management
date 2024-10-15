@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 
 const User = require('../models/user');
@@ -35,8 +34,7 @@ const updateUserRole = async (req, res) => {
     const { id } = req.params;
     const { newRole } = req.body;
 
-    ////////////////// TEST THIS !!!!!!!!!!!!!!!!!!
-    if (!id || !newRole) {
+    if (!newRole) {
       return res.status(400).json({ message: 'Missing required fields: newRole' });
     }
 
@@ -80,13 +78,10 @@ const updateUserRole = async (req, res) => {
 // sets the assignedTo field of all tasks assigned to the user to null
 // if user is a manager, deletes all tasks assigned to the user
 // expects the user ID in the request params
-// returns a success message
+// responds with a success message
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ message: 'Missing required fields: id (of the user to be deleted)' });
-    }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: 'Invalid format for user ID' });

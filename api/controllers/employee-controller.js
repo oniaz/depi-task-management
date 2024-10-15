@@ -1,11 +1,10 @@
-
 const mongoose = require('mongoose');
 
 const User = require('../models/user');
 const Task = require('../models/task');
 
 // expects userID in req (passed from middelware)
-// // responds with all tasks assigned to the user (populated with users' names)
+// responds with all tasks assigned to the user (populated with users' names)
 const getAllTasks = async (req, res) => {
   try {
     ////////////// FOR TESTING!!!!!!!!!!!
@@ -58,7 +57,7 @@ const getAllTasks = async (req, res) => {
 
 // expects userID in req (passed from middelware)
 // expects task id passed as parameter :id
-// // responds with 1 task by id created by the user (populated with users' names)
+// responds with 1 task by id created by the user (populated with users' names)
 const getTask = async (req, res) => {
   try {
     ////////////// FOR TESTING!!!!!!!!!!!
@@ -81,10 +80,6 @@ const getTask = async (req, res) => {
 
 
     const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({ message: 'Missing required parameter: id' });
-    }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: 'Invalid format for task ID' });
@@ -123,6 +118,10 @@ const getTask = async (req, res) => {
   }
 }
 
+// expects userID in req (passed from middelware)
+// expects task id passed as parameter :id
+// deletes 1 task by id assigned to the user
+// responds with a success message
 const updateTaskStatus = async (req, res) => {
   try {
     ////////////// FOR TESTING!!!!!!!!!!!
@@ -147,8 +146,7 @@ const updateTaskStatus = async (req, res) => {
     const { id } = req.params;
     const { newStatus } = req.body;
 
-    ////////////////// TEST THIS !!!!!!!!!!!!!!!!!!
-    if (!id || !newStatus) {
+    if (!newStatus) {
       return res.status(400).json({ message: 'Missing required fields: newStatus' });
     }
 
