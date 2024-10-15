@@ -27,7 +27,11 @@ app.use("/api/manager", managerRoutes);
 app.use("/api/employee", employeeRoutes);
 
 app.get("/", (req, res) => {
-    res.send("API is running... yay :)");
+    res.send("Task Management System API is up and running... :)");
+});
+
+app.use((req, res) => {
+    res.status(404).json({ error: "404 Not Found: Sorry, the endpoint you requested could not be found. Please verify your request." });
 });
 
 app.listen(PORT, () => {
