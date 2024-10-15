@@ -1,7 +1,10 @@
 const express = require('express');
+const authMiddleware = require('../middleware/auth-middleware');
 const managerController = require('../controllers/manager-controller');
 
 const router = express.Router();
+
+router.use(authMiddleware.authenticate, authMiddleware.authorize(['manager']));
 
 router.get('/tasks', managerController.getAllTasks);
 router.post('/tasks', managerController.createTask);

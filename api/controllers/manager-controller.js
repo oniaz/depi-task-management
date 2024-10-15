@@ -7,25 +7,11 @@ const Task = require('../models/task');
 // responds with all tasks created by the user (populated with users' names)
 const getAllTasks = async (req, res) => {
   try {
-    ////////////// FOR TESTING!!!!!!!!!!!
-    req.userID = req.body.userID;
-    //////////////
-
-    const { userID } = req;
+    const { userID } = req.user;
 
     if (!userID) {
-      return res.status(400).json({ message: 'Missing required fields: UserID' });
+      return res.status(400).json({ message: 'Missing required fields: UserID from token' });
     }
-
-    ////// should be handled in middleware //////
-    if (!mongoose.Types.ObjectId.isValid(userID)) {
-      return res.status(400).json({ message: 'Invalid format for user ID' });
-    }
-    if (!(await User.findById(userID))) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    ////// middleware //////
-
 
     const tasks = await Task.find({ createdBy: userID })
       .populate('createdBy', 'name')
@@ -68,24 +54,11 @@ const getAllTasks = async (req, res) => {
 // responds with created task (populated with users' names)
 const createTask = async (req, res) => {
   try {
-    ////////////// FOR TESTING!!!!!!!!!!!
-    req.userID = req.body.userID;
-    //////////////
-
-    const { userID } = req;
+    const { userID } = req.user;
 
     if (!userID) {
-      return res.status(400).json({ message: 'Missing required fields: UserID' });
+      return res.status(400).json({ message: 'Missing required fields: UserID from token' });
     }
-    ////// should be handled in middleware //////
-    if (!mongoose.Types.ObjectId.isValid(userID)) {
-      return res.status(400).json({ message: 'Invalid format for user ID' });
-    }
-    if (!(await User.findById(userID))) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    ////// middleware //////
-
 
     const { title, description, assignedTo, dueDate, priority, category } = req.body;
 
@@ -161,25 +134,11 @@ const createTask = async (req, res) => {
 // responds with 1 task by id created by the user (populated with users' names)
 const getTask = async (req, res) => {
   try {
-    ////////////// FOR TESTING!!!!!!!!!!!
-    req.userID = req.body.userID;
-    //////////////
-
-    const { userID } = req;
+    const { userID } = req.user;
 
     if (!userID) {
-      return res.status(400).json({ message: 'Missing required fields: UserID' });
+      return res.status(400).json({ message: 'Missing required fields: UserID from token' });
     }
-
-    // should be handled in middleware
-    if (!mongoose.Types.ObjectId.isValid(userID)) {
-      return res.status(400).json({ message: 'Invalid format for user ID ' });
-    }
-    if (!(await User.findById(userID))) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    //////  middleware //////
-
 
     const { id } = req.params;
 
@@ -226,25 +185,11 @@ const getTask = async (req, res) => {
 // responds with a success message
 const deleteTask = async (req, res) => {
   try {
-    ////////////// FOR TESTING!!!!!!!!!!!
-    req.userID = req.body.userID;
-    //////////////
-
-    const { userID } = req;
+    const { userID } = req.user;
 
     if (!userID) {
-      return res.status(400).json({ message: 'Missing required fields: UserID' });
+      return res.status(400).json({ message: 'Missing required fields: UserID from token' });
     }
-
-    // should be handled in middleware
-    if (!mongoose.Types.ObjectId.isValid(userID)) {
-      return res.status(400).json({ message: 'Invalid format for user ID ' });
-    }
-    if (!(await User.findById(userID))) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    ////// middleware //////
-
 
     const { id } = req.params;
 
@@ -272,26 +217,12 @@ const deleteTask = async (req, res) => {
 // responds with updated task (populated with users' names)
 const updateTask = async (req, res) => {
   try {
-    ////////////// FOR TESTING!!!!!!!!!!!
-    req.userID = req.body.userID;
-    //////////////
-
-    const { userID } = req;
+    const { userID } = req.user;
 
     if (!userID) {
-      return res.status(400).json({ message: 'Missing required fields: UserID' });
+      return res.status(400).json({ message: 'Missing required fields: UserID from token' });
     }
 
-    ///////// should be handled in middleware
-    if (!mongoose.Types.ObjectId.isValid(userID)) {
-      return res.status(400).json({ message: 'Invalid format for user ID ' });
-    }
-    if (!(await User.findById(userID))) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    ////// middleware //////
-
-    
     const { id } = req.params;
     const { title, description, assignedTo, status, dueDate, priority, category } = req.body;
 
