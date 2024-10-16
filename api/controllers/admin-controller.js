@@ -18,7 +18,7 @@ const getAllUsers = async (req, res) => {
       role: user.role
     }));
 
-    res.status(200).json(formattedUsers);
+    res.status(200).json({ message: "Users retrieved successfully", formattedUsers });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
