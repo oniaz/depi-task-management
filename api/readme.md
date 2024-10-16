@@ -101,7 +101,7 @@ The server should now be running, and you can access the API at `http://localhos
 ### Manager Routes
 
 - **GET** `/api/manager/users`  
-  Retrieves a list of all users Retrieves a list of all users with managers or employeee roles with data (id, name).   
+  Retrieves a list of all users with managers or employeee roles with data (id, name).   
 
 - **GET** `/api/manager/tasks`  
   Retrieves a list of all tasks created by the user (manager) with data (id, title, description, status, dueDate, priority, category, assignedTo, createdBy).  
