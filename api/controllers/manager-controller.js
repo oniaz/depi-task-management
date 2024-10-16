@@ -290,10 +290,28 @@ const updateTask = async (req, res) => {
   }
 }
 
+// retrieves all users (data : id, name)
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({ role: { $nin: ['admin', 'deleted'] } });
+
+    const formattedUsers = users.map(user => ({
+      id: user._id,
+      name: user.name,
+    }));
+
+    res.status(200).json({ message: "Users retrieved successfully", formattedUsers });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getAllTasks,
   createTask,
   getTask,
   deleteTask,
-  updateTask
+  updateTask,
+  getAllUsers
 }

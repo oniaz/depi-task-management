@@ -84,7 +84,7 @@ The server should now be running, and you can access the API at `http://localhos
 ### Admin Routes
 
 - **GET** `/api/admin/users`  
-  Retrieves a list of all users.  
+  Retrieves a list of all users with manager or employee roles with data (id, name, email, role).  
 
 - **PATCH** `/api/admin/users/:id`  
   Updates a user's role by ID.  
@@ -100,8 +100,11 @@ The server should now be running, and you can access the API at `http://localhos
 
 ### Manager Routes
 
+- **GET** `/api/manager/users`  
+  Retrieves a list of all users Retrieves a list of all users with managers or employeee roles with data (id, name).   
+
 - **GET** `/api/manager/tasks`  
-  Retrieves a list of all tasks.  
+  Retrieves a list of all tasks created by the user (manager) with data (id, title, description, status, dueDate, priority, category, assignedTo, createdBy).  
 
 - **POST** `/api/manager/tasks`  
   Creates a new task. The status is set to complete by default, and the priority is optional, defaulting to medium.  
@@ -122,7 +125,7 @@ The server should now be running, and you can access the API at `http://localhos
   - Unix Timestamp: `1697371800000`
 
 - **GET** `/api/manager/tasks/:id`  
-  Retrieves a specific task by ID.  
+  Retrieves a specific task by ID created by the user (manager) with data (id, title, description, status, dueDate, priority, category, assignedTo, createdBy).  
 
 - **PUT** `/api/manager/tasks/:id`  
   Updates a specific task by ID. Any of the following fields can be provided; not all of them are required.  
@@ -146,10 +149,10 @@ The server should now be running, and you can access the API at `http://localhos
 ### Employee Routes
 
 - **GET** `/api/employee/tasks`  
-  Retrieves a list of all tasks assigned to the employee.  
+  Retrieves a list of all tasks assigned to the employee with data (id, title, description, status, dueDate, priority, category, assignedTo, createdBy). 
 
 - **GET** `/api/employee/tasks/:id`  
-  Retrieves a specific task assigned to the employee by ID.  
+  Retrieves a specific task assigned to the employee by ID with data (id, title, description, status, dueDate, priority, category, assignedTo, createdBy).  
 
 - **PATCH** `/api/employee/tasks/:id`  
   Updates the status of a specific task by ID.  
