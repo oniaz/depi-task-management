@@ -163,3 +163,4 @@ The server should now be running, and you can access the API at `http://localhos
 ### Note
 - For all routes requiring authentication, include the JWT token in the request headers as `Authorization: Bearer <token>`.
 - Replace `:id` in the routes with the appropriate resource ID.
+- All date fields returned by the API, such as dueDate, are in ISO 8601 format (e.g., 2024-10-18T00:00:00.000Z). The time is in UTC. It is the responsibility of the frontend to convert this into the desired format or timezone for display purposes.
