@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const User = require('../models/user');
-const user = require('../models/user');
 
 // Middleware to protect routes
 

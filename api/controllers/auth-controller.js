@@ -4,7 +4,6 @@ const saltRounds = 10;
 
 const User = require('../models/user');
 
-
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
