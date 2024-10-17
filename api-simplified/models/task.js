@@ -5,10 +5,6 @@ const taskSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    description: {
-        type: String,
-        required: true
-    },
     category: {
         type: String,
         required: true
@@ -18,19 +14,10 @@ const taskSchema = new mongoose.Schema({
         enum: ['low', 'medium', 'high'],
         default: 'medium'
     },
-    dueDate: {
-        type: Date,
-        required: true
-    },
     status: {
         type: String,
         enum: ['in progress', 'completed'],
         default: 'in progress'
-    },
-    assignedTo: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

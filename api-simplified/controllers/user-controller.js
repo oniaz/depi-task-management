@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const saltRounds = 10;
 
 const User = require('../models/user');
+const Task = require('../models/task');
+
 
 const register = async (req, res) => {
   try {
@@ -45,7 +47,7 @@ const login = async (req, res) => {
       const jwtToken = jwt.sign({ userID: existingUser._id }, process.env.JWT_SECRET);
       // const token = jwt.sign({ userID: existingUser._id }, process.env.JWT_SECRET,  { expiresIn: '7d' });
 
-      return res.status(200).json({ message: 'Login successful', jwtToken, user: existingUser.name , roleOnLogin: existingUser.role });
+      return res.status(200).json({ message: 'Login successful', jwtToken, user: existingUser.name, roleOnLogin: existingUser.role });
     } else {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -55,7 +57,29 @@ const login = async (req, res) => {
   }
 }
 
+// deletes a user
+// deletes all tasks created by the user
+// responds with a success message
+const deleteUser = async (req, res) => {
+  try {
+    const { userID } = req.user;
+
+    if (!userID) {
+      return res.status(400).json({ message: 'Missing required fields: UserID from token' });
+    }
+
+    await Task.deleteMany({ createdBy: userID });
+
+    await User.findByIdAndDelete(userID);
+    res.status(200).json({ message: 'User and associated tasks deleted successfully' });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   register,
-  login
+  login,
+  deleteUser
 };

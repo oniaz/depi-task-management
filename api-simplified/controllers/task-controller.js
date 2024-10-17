@@ -15,20 +15,13 @@ const getAllTasks = async (req, res) => {
 
     const tasks = await Task.find({ createdBy: userID })
       .populate('createdBy', 'name')
-      .populate('assignedTo', 'name')
 
     const formattedTasks = tasks.map(task => ({
       id: task._id,
       title: task.title,
-      description: task.description,
       status: task.status,
-      dueDate: task.dueDate,
       priority: task.priority,
       category: task.category,
-      assignedTo: {
-        id: task.assignedTo._id,
-        name: task.assignedTo.name
-      },
       createdBy: {
         id: task.createdBy._id,
         name: task.createdBy.name
@@ -60,22 +53,14 @@ const createTask = async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields: UserID from token' });
     }
 
-    const { title, description, assignedTo, dueDate, priority, category } = req.body;
+    const {
+      title,
+      priority,
+      category
+    } = req.body;
 
-    if (!title || !description || !assignedTo || !dueDate || !category) {
-      return res.status(400).json({ message: 'Missing required fields: title, description, assignedTo, dueDate, or category' });
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(assignedTo)) {
-      return res.status(400).json({ message: 'Invalid format for assignedTo ID' });
-    }
-
-    if (!(await User.findById(assignedTo))) {
-      return res.status(404).json({ message: 'User assignedTo not found' });
-    }
-
-    if (isNaN(new Date(dueDate))) {
-      return res.status(400).json({ message: 'Invalid due date' });
+    if (!title || !category) {
+      return res.status(400).json({ message: 'Missing required fields: title or category' });
     }
 
     if (priority && !['low', 'medium', 'high'].includes(priority)) {
@@ -84,38 +69,22 @@ const createTask = async (req, res) => {
 
     const newTask = new Task({
       title,
-      description,
-      assignedTo,
       createdBy: userID,
-      // // status: status || 'in progress',
-      // status,
-      dueDate: new Date(dueDate),
-      // priority: priority || 'medium',
       priority,
       category
     });
 
     await newTask.save();
-    // nice try but i need to populate :/
-    // const {__v, _id, ...task} = newTask._doc;
-    // res.status(201).json({ message: "Task created successfully", task: {id: _id, ...task} });
 
     const updatedTask = await Task.findById(newTask._id)
       .populate('createdBy', 'name')
-      .populate('assignedTo', 'name');
 
     const formattedTask = {
       id: updatedTask._id,
       title: updatedTask.title,
-      description: updatedTask.description,
       status: updatedTask.status,
-      dueDate: updatedTask.dueDate,
       priority: updatedTask.priority,
       category: updatedTask.category,
-      assignedTo: {
-        id: updatedTask.assignedTo._id,
-        name: updatedTask.assignedTo.name,
-      },
       createdBy: {
         id: updatedTask.createdBy._id,
         name: updatedTask.createdBy.name,
@@ -148,7 +117,7 @@ const getTask = async (req, res) => {
 
     const task = await Task.findOne({ _id: id, createdBy: userID })
       .populate('createdBy', 'name')
-      .populate('assignedTo', 'name')
+    // .populate('assignedTo', 'name')
 
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
@@ -157,15 +126,15 @@ const getTask = async (req, res) => {
     const formattedTask = {
       id: task._id,
       title: task.title,
-      description: task.description,
+      // description: task.description,
       status: task.status,
-      dueDate: task.dueDate,
+      // dueDate: task.dueDate,
       priority: task.priority,
       category: task.category,
-      assignedTo: {
-        id: task.assignedTo._id,
-        name: task.assignedTo.name,
-      },
+      // assignedTo: {
+      //   id: task.assignedTo._id,
+      //   name: task.assignedTo.name,
+      // },
       createdBy: {
         id: task.createdBy._id,
         name: task.createdBy.name,
@@ -224,16 +193,19 @@ const updateTask = async (req, res) => {
     }
 
     const { id } = req.params;
-    const { title, description, assignedTo, status, dueDate, priority, category } = req.body;
+    const { title,
+      status,
+      priority,
+      category } = req.body;
 
     const task = await Task.findOne({ _id: id, createdBy: userID })
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
 
-    if (dueDate && isNaN(new Date(dueDate))) {
-      return res.status(400).json({ message: 'Invalid due date' });
-    }
+    // if (dueDate && isNaN(new Date(dueDate))) {
+    //   return res.status(400).json({ message: 'Invalid due date' });
+    // }
 
     if (status && !['in progress', 'completed'].includes(status)) {
       return res.status(400).json({ message: 'Invalid status' });
@@ -245,10 +217,7 @@ const updateTask = async (req, res) => {
 
     const updates = {
       title,
-      description,
-      assignedTo,
       status,
-      dueDate: dueDate ? new Date(dueDate) : undefined,
       priority,
       category,
     };
@@ -263,20 +232,13 @@ const updateTask = async (req, res) => {
 
     const updatedTask = await Task.findById(id)
       .populate('createdBy', 'name')
-      .populate('assignedTo', 'name');
 
     const formattedTask = {
       id: updatedTask._id,
       title: updatedTask.title,
-      description: updatedTask.description,
       status: updatedTask.status,
-      dueDate: updatedTask.dueDate,
       priority: updatedTask.priority,
       category: updatedTask.category,
-      assignedTo: {
-        id: updatedTask.assignedTo._id,
-        name: updatedTask.assignedTo.name,
-      },
       createdBy: {
         id: updatedTask.createdBy._id,
         name: updatedTask.createdBy.name,
@@ -290,28 +252,10 @@ const updateTask = async (req, res) => {
   }
 }
 
-// retrieves all users (data : id, name)
-const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find({ role: { $nin: ['admin', 'deleted'] } });
-
-    const formattedUsers = users.map(user => ({
-      id: user._id,
-      name: user.name,
-    }));
-
-    res.status(200).json({ message: "Users retrieved successfully", formattedUsers });
-
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 module.exports = {
   getAllTasks,
   createTask,
   getTask,
   deleteTask,
-  updateTask,
-  getAllUsers
+  updateTask
 }
