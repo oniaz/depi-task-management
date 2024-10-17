@@ -25,7 +25,7 @@ import { useState } from "react";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 import { StopwatchIcon } from "@radix-ui/react-icons";
 import { capitalize } from "../../lib/utils";
-import { deleteTask, updateTask } from "../../api/tasks"; // تأكد من استيراد الدوال
+import { deleteTask, updateTask } from "../../api/tasks";
 
 const iconMap = {
     status: {
@@ -115,14 +115,12 @@ export const columns = [
             const handleDelete = async () => {
                 await deleteTask(task.id);
                 setOpenDeleteDialog(false);
-                // يمكنك إضافة كود لإعادة تحميل المهام أو تحديث الحالة
             };
 
             const handleEditSubmit = async (e) => {
                 e.preventDefault();
-                await updateTask(task.id, editedTask); // تمرير ID المهمة
+                await updateTask(task.id, editedTask);
                 setOpenEditDialog(false);
-                // يمكنك إضافة كود لإعادة تحميل المهام أو تحديث الحالة
             };
 
             const handleInputChange = (e) => {
@@ -163,8 +161,6 @@ export const columns = [
                             </div>
                         </AlertDialogContent>
                     </AlertDialog>
-
-                    {/* Dialog for editing the task */}
                     <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
                         <DialogTrigger asChild />
                         <DialogContent>
