@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { addTaskFormSchema } from "../schemas";
+import { addTaskFormSchema, editTaskFormSchema } from "../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -9,6 +9,9 @@ import {
     Briefcase,
     School,
     User,
+    Square,
+    CheckSquare,
+    TimerIcon,
 } from "lucide-react";
 
 import {
@@ -31,19 +34,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const AddTaskForm = () => {
+const EditTaskForm = ({ task }) => {
     const form = useForm({
-        resolver: zodResolver(addTaskFormSchema),
+        resolver: zodResolver(editTaskFormSchema),
         defaultValues: {
-            title: "",
-            priority: "",
-            category: "",
+            title: task.title,
+            status: task.status.toLowerCase(),
+            priority: task.priority.toLowerCase(),
+            category: task.category.toLowerCase(),
         },
     });
 
     const onSubmit = (values) => {
         // TODO: Api calls
-        console.log("hello?");
         console.log(values);
     };
 
@@ -59,6 +62,41 @@ const AddTaskForm = () => {
                             <FormControl>
                                 <Input placeholder="Todo" {...field} />
                             </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Status</FormLabel>
+                            <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                            >
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Choose a status" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="todo">
+                                        <Square className="w-4 inline-block mb-1 mr-1" />
+                                        Todo
+                                    </SelectItem>
+                                    <SelectItem value="in progress">
+                                        <TimerIcon className="w-4 inline-block mb-1 mr-1" />
+                                        In Progress
+                                    </SelectItem>
+                                    <SelectItem value="done">
+                                        <CheckSquare className="w-4 inline-block mb-1 mr-1" />
+                                        Done
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
                             <FormMessage />
                         </FormItem>
                     )}
@@ -134,11 +172,11 @@ const AddTaskForm = () => {
                     )}
                 />
                 <Button className="w-full" type="submit">
-                    Add Task
+                    Update Task
                 </Button>
             </form>
         </Form>
     );
 };
 
-export default AddTaskForm;
+export default EditTaskForm;

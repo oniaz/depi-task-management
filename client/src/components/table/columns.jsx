@@ -8,17 +8,35 @@ import {
     School,
     Square,
     User,
+    MonitorStopIcon,
+    TimerIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuPortal,
     DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { StopwatchIcon } from "@radix-ui/react-icons";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+    DialogDescription,
+} from "@/components/ui/dialog";
+import EditTaskForm from "../EditTaskForm";
+
 import { capitalize } from "../../lib/utils";
 
 export const columns = [
@@ -76,26 +94,58 @@ export const columns = [
         cell: ({ row }) => {
             // access task data
             const task = row.original;
+            console.log(task);
 
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => console.log("Hello, World!")}
-                        >
-                            Log Hello, World!
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Any other actions</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <Dialog>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuSub>
+                                <DropdownMenuSubTrigger>
+                                    Change Status
+                                </DropdownMenuSubTrigger>
+                                <DropdownMenuPortal>
+                                    <DropdownMenuSubContent>
+                                        <DropdownMenuItem>
+                                            <Square className="w-4 inline-block mr-1" />
+                                            Todo
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <TimerIcon className="w-4 inline-block mr-1" />
+                                            In Progress
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <CheckSquare className="w-4 inline-block mr-1" />
+                                            Done
+                                        </DropdownMenuItem>
+                                    </DropdownMenuSubContent>
+                                </DropdownMenuPortal>
+                            </DropdownMenuSub>{" "}
+                            <DialogTrigger asChild>
+                                <DropdownMenuItem className="cursor-pointer">
+                                    Edit Task
+                                </DropdownMenuItem>
+                            </DialogTrigger>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Edit Task</DialogTitle>
+                            <DialogDescription>
+                                Edit tasks here. Click update when you&apos;re
+                                finished
+                            </DialogDescription>
+                        </DialogHeader>
+                        <EditTaskForm task={task} />
+                    </DialogContent>
+                </Dialog>
             );
         },
     },
@@ -149,7 +199,7 @@ const getStatusIcon = (status) => {
         }
 
         case "in progress": {
-            return StopwatchIcon;
+            return TimerIcon;
         }
 
         case "done": {
