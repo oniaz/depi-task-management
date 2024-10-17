@@ -1,32 +1,60 @@
 {
-    "tasks": [
-        {
-            "id": 1,
-            "title": "Depi Final Project",
-            "status": "Todo",
-            "priority": "High",
-            "category": "Work"
-        },
-        {
-            "id": 2,
-            "title": "Amr Amein yapping lecture",
-            "status": "done",
-            "priority": "Low",
-            "category": "School"
-        },
-        {
-            "id": 3,
-            "title": "new task",
-            "status": "in progress",
-            "priority": "Medium",
-            "category": "Personal"
-        },
-        {
-            "id": 3,
-            "title": "new task",
-            "status": "Done",
-            "priority": "Medium",
-            "category": "Personal"
-        }
-    ]
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Depi Final Project",
+      "status": "Todo",
+      "priority": "High",
+      "category": "Work"
+    },
+    {
+      "id": "2",
+      "title": "Amr Amein yapping lecture",
+      "status": "done",
+      "priority": "Low",
+      "category": "School"
+    },
+    {
+      "id": "3",
+      "title": "new task",
+      "status": "in progress",
+      "priority": "Medium",
+      "category": "Personal"
+    },
+    {
+      "id": "3",
+      "title": "new task",
+      "status": "Done",
+      "priority": "Medium",
+      "category": "Personal"
+    },
+    {
+      "id": "0cbb",
+      "title": "ادلع الجندوفلي",
+      "status": "in progress",
+      "priority": "medium",
+      "category": "school"
+    },
+    {
+      "id": "da02",
+      "title": "حاجة كدا ولا كدا",
+      "status": "todo",
+      "priority": "high",
+      "category": "personal"
+    },
+    {
+      "id": "8815",
+      "title": "كلام كتير ملوش داعي",
+      "status": "done",
+      "priority": "low",
+      "category": "school"
+    },
+    {
+      "id": "4f7e",
+      "title": "finally we did it",
+      "status": "done",
+      "priority": "high",
+      "category": "work"
+    }
+  ]
 }

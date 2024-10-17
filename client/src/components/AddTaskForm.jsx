@@ -1,143 +1,89 @@
-import { useForm } from "react-hook-form";
-import { addTaskFormSchema } from "../schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import {
-    ArrowDown,
-    ArrowLeft,
-    ArrowUp,
-    Briefcase,
-    School,
-    User,
-} from "lucide-react";
-
-import {
-    Form,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormControl,
-    FormMessage,
-} from "@/components/ui/form";
-
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { addTask } from '../api/tasks';
 import {
     Select,
+    SelectTrigger,
     SelectContent,
     SelectItem,
-    SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input"; 
 
 const AddTaskForm = () => {
-    const form = useForm({
-        resolver: zodResolver(addTaskFormSchema),
-        defaultValues: {
-            title: "",
-            priority: "",
-            category: "",
-        },
-    });
+    const [title, setTitle] = useState("");
+    const [status, setStatus] = useState("todo");
+    const [priority, setPriority] = useState("medium");
+    const [category, setCategory] = useState("work");
 
-    const onSubmit = (values) => {
-        // TODO: Api calls
-        console.log("hello?");
-        console.log(values);
+    const handleSubmit = async () => {
+
+        const newTask = {
+            title,
+            status,
+            priority,
+            category,
+        };
+
+        try {
+            const addedTask = await addTask(newTask);
+            console.log('Task added:', addedTask);
+
+            setTitle("");
+            setStatus("todo");
+            setPriority("medium");
+            setCategory("work");
+        } catch (error) {
+            console.error('Error adding task:', error);
+        }
     };
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Title</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Todo" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+                type="text"
+                placeholder="Task Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                className="border p-2 rounded" 
+            />
 
-                <FormField
-                    control={form.control}
-                    name="priority"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Priority</FormLabel>
-                            <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                            >
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Choose a priority" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="low">
-                                        <ArrowDown className="w-4 inline-block mr-1" />
-                                        Low
-                                    </SelectItem>
-                                    <SelectItem value="medium">
-                                        <ArrowLeft className="w-4 inline-block mr-1" />
-                                        Medium
-                                    </SelectItem>
-                                    <SelectItem value="high">
-                                        <ArrowUp className="w-4 inline-block mr-1" />
-                                        High
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+            <Select value={status} onValueChange={setStatus} className="mb-4"> 
+                <SelectTrigger>
+                    <SelectValue placeholder="Select Status" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="todo">To Do</SelectItem>
+                    <SelectItem value="in progress">In Progress</SelectItem>
+                    <SelectItem value="done">Done</SelectItem>
+                </SelectContent>
+            </Select>
 
-                <FormField
-                    control={form.control}
-                    name="category"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Category</FormLabel>
-                            <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                            >
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Choose a category" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="personal">
-                                        <User className="w-4 inline-block mr-1" />
-                                        Personal
-                                    </SelectItem>
-                                    <SelectItem value="school">
-                                        <School className="w-4 inline-block mr-1" />
-                                        School
-                                    </SelectItem>
-                                    <SelectItem value="work">
-                                        <Briefcase className="w-4 inline-block mr-1" />
-                                        Work
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <Button className="w-full" type="submit">
-                    Add Task
-                </Button>
-            </form>
-        </Form>
+            <Select value={priority} onValueChange={setPriority}  className="mb-4"> 
+                <SelectTrigger>
+                    <SelectValue placeholder="Select Priority" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                </SelectContent>
+            </Select>
+
+            <Select value={category} onValueChange={setCategory}  className="my-40">
+                <SelectTrigger>
+                    <SelectValue placeholder="Select Category" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="work">Work</SelectItem>
+                    <SelectItem value="school">School</SelectItem>
+                    <SelectItem value="personal">Personal</SelectItem>
+                </SelectContent>
+            </Select>
+
+            <Button type="submit" className="w-full">Add Task</Button>
+        </form>
     );
 };
 
