@@ -10,6 +10,8 @@ import {
     User,
     MonitorStopIcon,
     TimerIcon,
+    Pen,
+    Trash,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -94,7 +96,6 @@ export const columns = [
         cell: ({ row }) => {
             // access task data
             const task = row.original;
-            console.log(task);
 
             return (
                 <Dialog>
@@ -107,6 +108,20 @@ export const columns = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DialogTrigger asChild>
+                                <DropdownMenuItem className="cursor-pointer">
+                                    <Pen className="h-4 mr-1" />
+                                    Edit Task
+                                </DropdownMenuItem>
+                            </DialogTrigger>
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={deleteTask}
+                            >
+                                <Trash className="h-4 mr-1" />
+                                Delete
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
                             <DropdownMenuSub>
                                 <DropdownMenuSubTrigger>
                                     Change Status
@@ -128,11 +143,6 @@ export const columns = [
                                     </DropdownMenuSubContent>
                                 </DropdownMenuPortal>
                             </DropdownMenuSub>{" "}
-                            <DialogTrigger asChild>
-                                <DropdownMenuItem className="cursor-pointer">
-                                    Edit Task
-                                </DropdownMenuItem>
-                            </DialogTrigger>
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <DialogContent>
@@ -150,6 +160,10 @@ export const columns = [
         },
     },
 ];
+
+const deleteTask = () => {
+    console.log("task deleted");
+};
 
 const getPriorityIcon = (priority) => {
     priority = priority.toLowerCase();

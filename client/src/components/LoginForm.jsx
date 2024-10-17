@@ -1,109 +1,114 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { FaGoogle } from "react-icons/fa";
 import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
+    Form,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormControl,
+    FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useNavigate } from "react-router-dom"; 
-
-const loginSchema = z.object({
-  email: z.string().email({ message: "Invalid email address." }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
-});
+import { loginSchema } from "../schemas";
+import { Link } from "react-router-dom";
 
 const LoginForm = () => {
-  const navigate = useNavigate();
-  const form = useForm({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+    const form = useForm({
+        resolver: zodResolver(loginSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    });
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
+    const onSubmit = (data) => {
+        console.log(data);
+    };
 
-  const handleGoogleLogin = () => {
-    console.log("Login with Google"); 
-  };
+    const handleGoogleLogin = () => {
+        console.log("Login with Google");
+    };
 
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="bg-card p-8 rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold mb-4 text-foreground">Login</h1>
-          
-          {/* Email Field */}
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="you@example.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    return (
+        <Form {...form}>
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="mx-auto mt-32 w-full md:w-8/12 lg:w-6/12 space-y-4 bg-card p-8 rounded-lg border border-gray-800"
+            >
+                <h1 className="text-2xl font-bold mb-4 text-foreground">
+                    Login
+                </h1>
 
-          {/* Password Field */}
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="Enter your password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                {/* Email Field */}
+                <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                                <Input
+                                    placeholder="you@example.com"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
-          {/* Login Button */}
-          <Button type="submit" className="mt-4 w-full bg-primary text-primary-foreground hover:bg-primary-foreground hover:text-background">
-            Login
-          </Button>
+                {/* Password Field */}
+                <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="password"
+                                    placeholder="Enter your password"
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
-          {/* Login with Google Button */}
-          <Button
-            type="button"
-            onClick={handleGoogleLogin}
-            className="mt-2 w-full bg-red-600 text-white hover:bg-red-700"
-          >
-            Login with Google
-          </Button>
+                <div className="flex flex-col">
+                    <div className="mt-8 space-y-4">
+                        {/* Login Button */}
+                        <Button className="w-full" type="submit">
+                            Login
+                        </Button>
 
-          {/* Register Link */}
-          <div className="mt-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <span
-                className="text-primary cursor-pointer hover:underline"
-                onClick={() => navigate("/register")} 
-              >
-                Register here
-              </span>
-            </p>
-          </div>
-        </form>
-      </Form>
-    </div>
-  );
+                        {/* Login with Google Button */}
+                        <Button
+                            className="w-full"
+                            variant="outline"
+                            onClick={handleGoogleLogin}
+                        >
+                            <FaGoogle className="mr-1 mt-0.5" />
+                            Login with Google
+                        </Button>
+                    </div>
+                </div>
+
+                {/* Register Link */}
+                <div className="mt-4 text-center">
+                    <p className="text-sm text-muted-foreground">
+                        Don&apos;t have an account?{" "}
+                        <Link className="text-primary cursor-pointer hover:underline">
+                            Register here
+                        </Link>
+                    </p>
+                </div>
+            </form>
+        </Form>
+    );
 };
 
 export default LoginForm;

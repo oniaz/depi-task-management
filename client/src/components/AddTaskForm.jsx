@@ -43,7 +43,6 @@ const AddTaskForm = () => {
 
     const onSubmit = (values) => {
         // TODO: Api calls
-        console.log("hello?");
         console.log(values);
     };
 

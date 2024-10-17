@@ -1,11 +1,17 @@
-import { useLoaderData } from "react-router-dom";
+import { Navigate, useLoaderData } from "react-router-dom";
 import TasksTable from "../components/table/TasksTable";
 import { columns } from "../components/table/columns";
+import useUser from "../hooks/useUser";
 
 const HomePage = () => {
+    const { user } = useUser();
     const { tasks } = useLoaderData();
 
-    return <TasksTable columns={columns} data={tasks} />;
+    return user ? (
+        <TasksTable columns={columns} data={tasks} />
+    ) : (
+        <Navigate to="/login" />
+    );
 };
 
 export default HomePage;
