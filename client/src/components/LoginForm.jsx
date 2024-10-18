@@ -35,7 +35,7 @@ const LoginForm = () => {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="mx-auto mt-32 w-full md:w-8/12 lg:w-6/12 space-y-4 bg-card p-8 rounded-lg border border-gray-800"
+                className="mx-auto mt-8 w-full md:w-8/12 lg:w-6/12 space-y-4 bg-card p-8 rounded-lg border border-gray-800"
             >
                 <h1 className="text-2xl font-bold mb-4 text-foreground">
                     Login
@@ -101,7 +101,10 @@ const LoginForm = () => {
                 <div className="mt-4 text-center">
                     <p className="text-sm text-muted-foreground">
                         Don&apos;t have an account?{" "}
-                        <Link className="text-primary cursor-pointer hover:underline">
+                        <Link
+                            to="/register"
+                            className="text-primary cursor-pointer hover:underline"
+                        >
                             Register here
                         </Link>
                     </p>

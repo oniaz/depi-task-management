@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
     Form,
     FormField,
@@ -35,7 +36,7 @@ const RegisterForm = () => {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="mx-auto mt-32 w-full md:w-8/12 lg:w-6/12 space-y-4 bg-card p-8 rounded-lg border border-gray-800"
+                className="mx-auto mt-8 w-full md:w-8/12 lg:w-6/12 space-y-4 bg-card p-8 rounded-lg border border-gray-800"
             >
                 <h1 className="text-2xl font-bold mb-4 text-foreground">
                     Register
@@ -123,7 +124,10 @@ const RegisterForm = () => {
                 <div className="mt-4 text-center">
                     <p className="text-sm text-muted-foreground">
                         Already have an account?{" "}
-                        <Link className="text-primary cursor-pointer hover:underline">
+                        <Link
+                            to="/login"
+                            className="text-primary cursor-pointer hover:underline"
+                        >
                             Login here
                         </Link>
                     </p>
