@@ -29,7 +29,7 @@ const register = async (req, res) => {
   }
 }
 
-// returns token  + users's name
+// returns token  + user's name
 // token doesn't expire
 const login = async (req, res) => {
   try {
@@ -47,7 +47,7 @@ const login = async (req, res) => {
       const jwtToken = jwt.sign({ userID: existingUser._id }, process.env.JWT_SECRET);
       // const token = jwt.sign({ userID: existingUser._id }, process.env.JWT_SECRET,  { expiresIn: '7d' });
 
-      return res.status(200).json({ message: 'Login successful', jwtToken, user: existingUser.name, roleOnLogin: existingUser.role });
+      return res.status(200).json({ message: 'Login successful', jwtToken, user: existingUser.name});
     } else {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
