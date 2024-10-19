@@ -42,7 +42,7 @@ const getAllTasks = async (req, res) => {
 // 2024-10-15 2024-10-15T14:30:00Z 
 // RFC 2822 Format: Tue, 15 Oct 2024 14:30:00 GMT
 // Unix Timestamp: 1697371800000
-// params: title (required), description (required), assignedTo (required), dueDate (required), priority (optional, default: 'medium'), category (required)
+// params: title (required), priority (optional, default: 'medium'), category (required)
 // sets status to  'in progress'
 // responds with created task (populated with users' names)
 const createTask = async (req, res) => {
@@ -100,7 +100,7 @@ const createTask = async (req, res) => {
 
 // expects userID in req (passed from middelware)
 // expects task id passed as parameter :id
-// responds with 1 task by id created by the user (populated with users' names)
+// responds with 1 task by id created by the user (populated with user's name)
 const getTask = async (req, res) => {
   try {
     const { userID } = req.user;
@@ -255,7 +255,7 @@ const updateTask = async (req, res) => {
 // expects userID in req (passed from middelware)
 // expects task id passed as parameter :id
 // expects newStatus to be passed in body with value "completed" or "in progress"
-// responds with updated task (populated with users' names)
+// responds with updated task (populated with user's name)
 const updateTaskStatus = async (req, res) => {
   try {
     const { userID } = req.user;
