@@ -10,6 +10,36 @@ const tasksLoader = async () => {
     return { tasks };
 };
 
+const taskAction = async ({ request }) => {
+    const formData = await request.formData();
+    const { action, ...data } = Object.fromEntries(formData);
+
+    switch (action) {
+        case "add": {
+            console.log("add");
+            break;
+        }
+        case "delete": {
+            console.log("delete");
+            break;
+        }
+        case "edit": {
+            console.log("edit");
+            break;
+        }
+        case "mark-as": {
+            console.log("mark as");
+            break;
+        }
+        default:
+            console.log("idk");
+    }
+
+    console.log(data);
+
+    return { ok: true };
+};
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -19,6 +49,10 @@ const router = createBrowserRouter([
                 index: true,
                 element: <HomePage />,
                 loader: tasksLoader,
+            },
+            {
+                path: "/tasks",
+                action: taskAction,
             },
             {
                 path: "/login",

@@ -1,11 +1,11 @@
 import LoginForm from "@/components/LoginForm";
-import useUser from "../hooks/useUser";
+import useSession from "../hooks/useSession";
 import { Navigate } from "react-router-dom";
 
 const LoginPage = () => {
-    const { user } = useUser();
+    const { session } = useSession();
 
-    return !user ? <LoginForm /> : <Navigate to="/" />;
+    return !session ? <LoginForm /> : <Navigate to="/" />;
 };
 
 export default LoginPage;

@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
+import { SessionContext } from "../contexts/UserContext";
 
-const useUser = () => {
-    const values = useContext(UserContext);
+const useSession = () => {
+    const values = useContext(SessionContext);
 
     if (!values) {
         throw new Error(
@@ -15,4 +15,4 @@ const useUser = () => {
     return { user, setUser };
 };
 
-export default useUser;
+export default useSession;
