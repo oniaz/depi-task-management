@@ -1,13 +1,13 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import RootLayout from "./layouts/RootLayout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import { addTask, getTasks } from "./api/tasks";
+import ErrorPage from "./pages/ErrorPage";
+import { addTask, changeTaskStatus, getTasks } from "./api/tasks";
 
 const tasksLoader = async () => {
     const tasks = await getTasks();
-    console.log(tasks);
     return { tasks };
 };
 
@@ -30,7 +30,7 @@ const taskAction = async ({ request }) => {
             break;
         }
         case "mark-as": {
-            console.log("mark as");
+            await changeTaskStatus(data.taskId, data.newStatus);
             break;
         }
         default:
@@ -46,6 +46,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <RootLayout />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 index: true,
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/tasks",
+                element: <Navigate to="/" />,
                 action: taskAction,
             },
             {

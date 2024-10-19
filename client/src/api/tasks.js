@@ -11,8 +11,10 @@ export const addTask = (task) => {
 };
 
 export const changeTaskStatus = async (taskId, newStatus) => {
+    console.log("TASKID: ", taskId);
+    console.log("NEW STATUS: ", newStatus);
     const taskRes = await baseApi.patch(`/api/tasks/${taskId}`, {
-        status: newStatus,
+        newStatus,
     });
 
     return taskRes.data;

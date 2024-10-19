@@ -134,6 +134,7 @@ export const columns = [
                                             onClick={() =>
                                                 changeTaskStatus(
                                                     fetcher,
+                                                    task.id,
                                                     "todo"
                                                 )
                                             }
@@ -145,7 +146,8 @@ export const columns = [
                                             onClick={() =>
                                                 changeTaskStatus(
                                                     fetcher,
-                                                    "in progress"
+                                                    task.id,
+                                                    "in-progress"
                                                 )
                                             }
                                         >
@@ -156,6 +158,7 @@ export const columns = [
                                             onClick={() =>
                                                 changeTaskStatus(
                                                     fetcher,
+                                                    task.id,
                                                     "done"
                                                 )
                                             }
@@ -188,11 +191,12 @@ const deleteTask = () => {
     console.log("task deleted");
 };
 
-const changeTaskStatus = (fetcher, status) => {
+const changeTaskStatus = (fetcher, taskId, newStatus) => {
     fetcher.submit(
         {
             action: "mark-as",
-            status,
+            taskId,
+            newStatus,
         },
         {
             method: "PATCH",
@@ -248,6 +252,10 @@ const getStatusIcon = (status) => {
             return Square;
         }
 
+        case "in-progress": {
+            return TimerIcon;
+        }
+
         case "in progress": {
             return TimerIcon;
         }
@@ -257,6 +265,6 @@ const getStatusIcon = (status) => {
         }
 
         default:
-            return;
+            return "";
     }
 };

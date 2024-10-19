@@ -93,7 +93,7 @@ const EditTaskForm = ({ task }) => {
                                         <Square className="w-4 inline-block mb-1 mr-1" />
                                         Todo
                                     </SelectItem>
-                                    <SelectItem value="in progress">
+                                    <SelectItem value="in-progress">
                                         <TimerIcon className="w-4 inline-block mb-1 mr-1" />
                                         In Progress
                                     </SelectItem>
