@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
-import { addTaskFormSchema, editTaskFormSchema } from "../schemas";
+import { useEffect } from "react";
+import { editTaskFormSchema } from "../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
+    Loader2,
     ArrowDown,
     ArrowLeft,
     ArrowUp,
@@ -35,7 +37,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFetcher } from "react-router-dom";
 
-const EditTaskForm = ({ task }) => {
+const EditTaskForm = ({ closeDialog, task }) => {
     const form = useForm({
         resolver: zodResolver(editTaskFormSchema),
         defaultValues: {
@@ -47,11 +49,19 @@ const EditTaskForm = ({ task }) => {
     });
 
     const fetcher = useFetcher();
+    const isAdding =
+        fetcher.state === "submitting" || fetcher.state === "loading";
+
+    useEffect(() => {
+        if (fetcher.state === "idle" && fetcher.data?.ok) {
+            closeDialog();
+        }
+    }, [fetcher]);
 
     const onSubmit = (values) => {
         // TODO: Api calls
         fetcher.submit(
-            { action: "edit", ...values },
+            { action: "edit", id: task.id, ...values },
             { method: "PATCH", action: "/tasks" }
         );
     };
@@ -177,7 +187,8 @@ const EditTaskForm = ({ task }) => {
                         </FormItem>
                     )}
                 />
-                <Button className="w-full" type="submit">
+                <Button disabled={isAdding} className="w-full" type="submit">
+                    {isAdding && <Loader2 className="w-4 mr-2 animate-spin" />}
                     Update Task
                 </Button>
             </form>

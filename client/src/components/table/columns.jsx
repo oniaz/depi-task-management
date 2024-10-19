@@ -37,9 +37,9 @@ import {
 import EditTaskForm from "../EditTaskForm";
 
 import { capitalize } from "../../lib/utils";
-import { useFetcher } from "react-router-dom";
+import { useState } from "react";
 
-export const columns = [
+export const columns = (fetcher) => [
     {
         accessorKey: "title",
         header: "Title",
@@ -94,13 +94,17 @@ export const columns = [
         cell: ({ row }) => {
             // access task data
             const task = row.original;
-            const fetcher = useFetcher();
+            const [isEditDialogOpen, setIsEditDialogOpen] = useState();
 
             return (
-                <Dialog>
+                <Dialog open={isEditDialogOpen}>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
+                            <Button
+                                onClick={() => setIsEditDialogOpen(true)}
+                                variant="ghost"
+                                className="h-8 w-8 p-0"
+                            >
                                 <span className="sr-only">Open menu</span>
                                 <MoreHorizontal className="h-4 w-4" />
                             </Button>
@@ -117,7 +121,7 @@ export const columns = [
                             {/* Delete Task */}
                             <DropdownMenuItem
                                 className="cursor-pointer"
-                                onClick={deleteTask}
+                                onClick={() => deleteTask(fetcher, task.id)}
                             >
                                 <Trash className="h-4 mr-1" />
                                 Delete
@@ -179,7 +183,10 @@ export const columns = [
                                 finished
                             </DialogDescription>
                         </DialogHeader>
-                        <EditTaskForm task={task} />
+                        <EditTaskForm
+                            closeDialog={() => setIsEditDialogOpen(false)}
+                            task={task}
+                        />
                     </DialogContent>
                 </Dialog>
             );
@@ -187,8 +194,17 @@ export const columns = [
     },
 ];
 
-const deleteTask = () => {
-    console.log("task deleted");
+const deleteTask = (fetcher, taskId) => {
+    fetcher.submit(
+        {
+            action: "delete",
+            taskId,
+        },
+        {
+            method: "DELETE",
+            action: "/tasks",
+        }
+    );
 };
 
 const changeTaskStatus = (fetcher, taskId, newStatus) => {
