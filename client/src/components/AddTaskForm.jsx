@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { addTaskFormSchema } from "../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react"
 
 import {
     ArrowDown,
@@ -29,6 +31,13 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFetcher, useNavigation } from "react-router-dom";
@@ -41,6 +50,7 @@ const AddTaskForm = ({ closeDialog }) => {
             title: "",
             priority: "",
             category: "",
+            dueDate: new Date(),
         },
     });
 
@@ -148,6 +158,29 @@ const AddTaskForm = ({ closeDialog }) => {
                                     </SelectItem>
                                 </SelectContent>
                             </Select>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="dueDate"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Due Date</FormLabel>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button variant="outline" className="w-full">
+                                        <CalendarIcon />
+                                        {field.value ? format(new Date(field.value), "PPP") : "Pick a date"}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar mode="single" selected={field.value ? new Date(field.value) : null} onSelect={date => {
+                                        field.onChange(date);
+                                    }} />
+                                </PopoverContent>
+                            </Popover>
                             <FormMessage />
                         </FormItem>
                     )}
