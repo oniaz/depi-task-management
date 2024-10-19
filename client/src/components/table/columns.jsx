@@ -42,11 +42,19 @@ import { useState } from "react";
 export const columns = (fetcher) => [
     {
         accessorKey: "title",
-        header: "Title",
+        header: ({ column }) => (
+          <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Title
+          </button>
+        ),
     },
     {
         accessorKey: "status",
-        header: "Status",
+        header: ({ column }) => (
+          <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Status
+          </button>
+        ),
         cell: ({ getValue }) => {
             const status = capitalize(getValue());
             const StatusIcon = getStatusIcon(status);
@@ -61,7 +69,11 @@ export const columns = (fetcher) => [
     },
     {
         accessorKey: "priority",
-        header: "Priority",
+        header: ({ column }) => (
+          <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Priority
+          </button>
+        ),
         cell: ({ getValue }) => {
             const priority = capitalize(getValue());
             const PriorityIcon = getPriorityIcon(priority);
@@ -76,7 +88,11 @@ export const columns = (fetcher) => [
     },
     {
         accessorKey: "category",
-        header: "Category",
+       header: ({ column }) => (
+          <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Category
+          </button>
+        ),
         cell: ({ getValue }) => {
             const category = capitalize(getValue());
             const CategoryIcon = getCategoryIcon(category);
