@@ -182,7 +182,7 @@ const deleteTask = async (req, res) => {
 
 // expects userID in req (passed from middelware)
 // expects task id passed as parameter :id
-// parameters to be updated: title, description, assignedTo, status, dueDate, priority, category
+// parameters to be updated: title, status, priority, category
 // responds with updated task (populated with users' names)
 const updateTask = async (req, res) => {
   try {
@@ -252,10 +252,68 @@ const updateTask = async (req, res) => {
   }
 }
 
+// expects userID in req (passed from middelware)
+// expects task id passed as parameter :id
+// expects newStatus to be passed in body with value "completed" or "in progress"
+// responds with updated task (populated with users' names)
+const updateTaskStatus = async (req, res) => {
+  try {
+    const { userID } = req.user;
+
+    if (!userID) {
+      return res.status(400).json({ message: 'Missing required fields: UserID from token' });
+    }
+
+    const { id } = req.params;
+    const { newStatus } = req.body;
+
+    if (!newStatus) {
+      return res.status(400).json({ message: 'Missing required fields: newStatus' });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid format for task ID' });
+    }
+
+    if (!['in progress', 'completed'].includes(newStatus)) {
+      return res.status(400).json({ message: 'Invalid status' });
+    }
+
+    const task = await Task.findOne({ _id: id, createdBy: userID })
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    task.status = newStatus;
+    await task.save();
+
+    const updatedTask = await Task.findById(id)
+      .populate('createdBy', 'name')
+
+    const formattedTask = {
+      id: updatedTask._id,
+      title: updatedTask.title,
+      status: updatedTask.status,
+      priority: updatedTask.priority,
+      category: updatedTask.category,
+      createdBy: {
+        id: updatedTask.createdBy._id,
+        name: updatedTask.createdBy.name,
+      },
+    };
+
+    res.status(200).json({ message: 'Task status updated successfully', task: formattedTask });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   getAllTasks,
   createTask,
   getTask,
   deleteTask,
-  updateTask
+  updateTask,
+  updateTaskStatus
 }
