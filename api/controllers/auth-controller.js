@@ -45,7 +45,7 @@ const login = async (req, res) => {
       const jwtToken = jwt.sign({ userID: existingUser._id }, process.env.JWT_SECRET);
       // const token = jwt.sign({ userID: existingUser._id }, process.env.JWT_SECRET,  { expiresIn: '7d' });
 
-      return res.status(200).json({ message: 'Login successful', jwtToken, user: existingUser.name , roleOnLogin: existingUser.role });
+      return res.status(200).json({ message: 'Login successful', jwtToken, user: existingUser.name, roleOnLogin: existingUser.role });
     } else {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -55,7 +55,29 @@ const login = async (req, res) => {
   }
 }
 
+const getCurrentRole = async (req, res) => {
+  try {
+    const currentRole = req.user.role;
+
+    if (!currentRole) {
+      const { userID } = req.user;
+
+      if (!userID) {
+        return res.status(400).json({ message: 'Missing required fields: UserID from token' });
+      }
+      currentRole = await User.findOne({ _id: userID }, 'role');
+    }
+
+    return res.status(200).json({ message: 'Current role retrieved successfully', role: currentRole });
+
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
+
+
 module.exports = {
   register,
-  login
+  login,
+  getCurrentRole
 };
