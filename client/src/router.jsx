@@ -3,10 +3,11 @@ import RootLayout from "./layouts/RootLayout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import { getTasks } from "./api/tasks";
+import { addTask, getTasks } from "./api/tasks";
 
 const tasksLoader = async () => {
     const tasks = await getTasks();
+    console.log(tasks);
     return { tasks };
 };
 
@@ -16,7 +17,8 @@ const taskAction = async ({ request }) => {
 
     switch (action) {
         case "add": {
-            console.log("add");
+            await addTask(data);
+
             break;
         }
         case "delete": {

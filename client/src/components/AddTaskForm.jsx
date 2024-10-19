@@ -7,6 +7,7 @@ import {
     ArrowLeft,
     ArrowUp,
     Briefcase,
+    Loader2,
     School,
     User,
 } from "lucide-react";
@@ -30,9 +31,10 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useFetcher } from "react-router-dom";
+import { useFetcher, useNavigation } from "react-router-dom";
+import { useEffect } from "react";
 
-const AddTaskForm = () => {
+const AddTaskForm = ({ closeDialog }) => {
     const form = useForm({
         resolver: zodResolver(addTaskFormSchema),
         defaultValues: {
@@ -43,6 +45,14 @@ const AddTaskForm = () => {
     });
 
     const fetcher = useFetcher();
+    const isAdding =
+        fetcher.state === "submitting" || fetcher.state === "loading";
+
+    useEffect(() => {
+        if (fetcher.state === "idle" && fetcher.data?.ok) {
+            closeDialog();
+        }
+    }, [fetcher]);
 
     const onSubmit = (values) => {
         // TODO: Api calls
@@ -142,7 +152,8 @@ const AddTaskForm = () => {
                         </FormItem>
                     )}
                 />
-                <Button className="w-full" type="submit">
+                <Button disabled={isAdding} className="w-full" type="submit">
+                    {isAdding && <Loader2 className="w-4 mr-2 animate-spin" />}
                     Add Task
                 </Button>
             </form>

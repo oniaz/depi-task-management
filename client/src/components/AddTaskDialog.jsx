@@ -9,12 +9,22 @@ import {
 
 import { Button } from "@/components/ui/button";
 import AddTaskFrom from "./AddTaskForm";
+import { useState } from "react";
 
-const addTaskDialog = () => {
+const AddTaskDialog = () => {
+    const [dialogOpen, setDialogOpen] = useState();
+
+    const openDialog = () => {
+        setDialogOpen(true);
+    };
+    const closeDialog = () => {
+        setDialogOpen(false);
+    };
+
     return (
-        <Dialog>
+        <Dialog open={dialogOpen}>
             <DialogTrigger asChild>
-                <Button>
+                <Button onClick={openDialog}>
                     <span className="mr-2 text-xl font-bold">+</span>
                     Task
                 </Button>
@@ -26,10 +36,10 @@ const addTaskDialog = () => {
                         Add tasks here. Click add when you&apos;re finished
                     </DialogDescription>
                 </DialogHeader>
-                <AddTaskFrom />
+                <AddTaskFrom closeDialog={closeDialog} />
             </DialogContent>
         </Dialog>
     );
 };
 
-export default addTaskDialog;
+export default AddTaskDialog;
