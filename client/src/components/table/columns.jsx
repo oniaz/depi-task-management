@@ -106,6 +106,22 @@ export const columns = (fetcher) => [
         },
     },
     {
+        accessorKey: "dueDate",
+        header: ({ column }) => (
+          <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Due Date
+          </button>
+        ),
+        cell: ({ getValue }) => {
+            const dueDate = new Date(getValue());
+            return (
+                <span className="flex gap-2 items-center">
+                    {dueDate.toLocaleDateString()}
+                </span>
+            );
+        },
+    },
+    {
         id: "actions",
         cell: ({ row }) => {
             // access task data
