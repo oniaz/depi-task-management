@@ -46,7 +46,7 @@ npm run dev
 ## 🔨 Built With
 
 -   **React** - Frontend library for building user interfaces.
--   **Node.js **- Backend server for handling API requests.
+-   **Node.js** - Backend server for handling API requests.
 -   **MongoDB** - Database for storing task-related data.
 -   **Express.js** - Web framework for Node.js.
 
