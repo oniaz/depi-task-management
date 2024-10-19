@@ -107,7 +107,7 @@ The server should now be running, and you can access the API at `http://localhos
   Retrieves a list of all tasks created by the user (manager) with data (id, title, description, status, dueDate, priority, category, assignedTo, createdBy).  
 
 - **POST** `/api/manager/tasks`  
-  Creates a new task. The status is set to complete by default, and the priority is optional, defaulting to medium.  
+  Creates a new task. The status is set to "todo" by default, and the priority is optional, defaulting to medium.  
   **Body Parameters**:  
   ```json
   {

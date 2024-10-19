@@ -4,7 +4,7 @@ const User = require('../models/user');
 const Task = require('../models/task');
 
 // expects userID in req (passed from middelware)
-// responds with all tasks created by the user (populated with users' names)
+// responds with all tasks created by the user (populated with user's name)
 const getAllTasks = async (req, res) => {
   try {
     const { userID } = req.user;
@@ -38,7 +38,7 @@ const getAllTasks = async (req, res) => {
 // expects createBy userID in req (passed from middelware)
 // params: title (required), priority (optional, default: 'medium'), category (required)
 // sets status to 'todo'
-// responds with created task (populated with users' names)
+// responds with created task (populated with user's name)
 const createTask = async (req, res) => {
   try {
     const { userID } = req.user;
@@ -166,7 +166,7 @@ const deleteTask = async (req, res) => {
 // expects userID in req (passed from middelware)
 // expects task id passed as parameter :id
 // parameters to be updated: title, status, priority, category
-// responds with updated task (populated with users' names)
+// responds with updated task (populated with user's name)
 const updateTask = async (req, res) => {
   try {
     const { userID } = req.user;
