@@ -33,6 +33,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useFetcher } from "react-router-dom";
 
 const EditTaskForm = ({ task }) => {
     const form = useForm({
@@ -45,9 +46,14 @@ const EditTaskForm = ({ task }) => {
         },
     });
 
+    const fetcher = useFetcher();
+
     const onSubmit = (values) => {
         // TODO: Api calls
-        console.log(values);
+        fetcher.submit(
+            { action: "edit", ...values },
+            { method: "PATCH", action: "/tasks" }
+        );
     };
 
     return (

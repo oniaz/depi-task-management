@@ -30,6 +30,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useFetcher } from "react-router-dom";
 
 const AddTaskForm = () => {
     const form = useForm({
@@ -41,14 +42,23 @@ const AddTaskForm = () => {
         },
     });
 
+    const fetcher = useFetcher();
+
     const onSubmit = (values) => {
         // TODO: Api calls
-        console.log(values);
+        fetcher.submit(
+            { action: "add", ...values },
+            { method: "POST", action: "/tasks" }
+        );
     };
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                method="post"
+                className="space-y-8"
+            >
                 <FormField
                     control={form.control}
                     name="title"

@@ -8,7 +8,6 @@ import {
     School,
     Square,
     User,
-    MonitorStopIcon,
     TimerIcon,
     Pen,
     Trash,
@@ -17,12 +16,10 @@ import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuPortal,
     DropdownMenuSeparator,
-    DropdownMenuShortcut,
     DropdownMenuSub,
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
@@ -40,6 +37,7 @@ import {
 import EditTaskForm from "../EditTaskForm";
 
 import { capitalize } from "../../lib/utils";
+import { useFetcher } from "react-router-dom";
 
 export const columns = [
     {
@@ -96,6 +94,7 @@ export const columns = [
         cell: ({ row }) => {
             // access task data
             const task = row.original;
+            const fetcher = useFetcher();
 
             return (
                 <Dialog>
@@ -108,12 +107,14 @@ export const columns = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            {/* Edit Task */}
                             <DialogTrigger asChild>
                                 <DropdownMenuItem className="cursor-pointer">
                                     <Pen className="h-4 mr-1" />
                                     Edit Task
                                 </DropdownMenuItem>
                             </DialogTrigger>
+                            {/* Delete Task */}
                             <DropdownMenuItem
                                 className="cursor-pointer"
                                 onClick={deleteTask}
@@ -122,21 +123,43 @@ export const columns = [
                                 Delete
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
+                            {/* Change Status */}
                             <DropdownMenuSub>
                                 <DropdownMenuSubTrigger>
                                     Change Status
                                 </DropdownMenuSubTrigger>
                                 <DropdownMenuPortal>
                                     <DropdownMenuSubContent>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() =>
+                                                changeTaskStatus(
+                                                    fetcher,
+                                                    "todo"
+                                                )
+                                            }
+                                        >
                                             <Square className="w-4 inline-block mr-1" />
                                             Todo
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() =>
+                                                changeTaskStatus(
+                                                    fetcher,
+                                                    "in progress"
+                                                )
+                                            }
+                                        >
                                             <TimerIcon className="w-4 inline-block mr-1" />
                                             In Progress
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() =>
+                                                changeTaskStatus(
+                                                    fetcher,
+                                                    "done"
+                                                )
+                                            }
+                                        >
                                             <CheckSquare className="w-4 inline-block mr-1" />
                                             Done
                                         </DropdownMenuItem>
@@ -163,6 +186,19 @@ export const columns = [
 
 const deleteTask = () => {
     console.log("task deleted");
+};
+
+const changeTaskStatus = (fetcher, status) => {
+    fetcher.submit(
+        {
+            action: "mark-as",
+            status,
+        },
+        {
+            method: "PATCH",
+            action: "/tasks",
+        }
+    );
 };
 
 const getPriorityIcon = (priority) => {

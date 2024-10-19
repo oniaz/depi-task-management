@@ -1,11 +1,11 @@
 import RegisterForm from "../components/RegisterForm";
-import useUser from "../hooks/useUser";
+import useSession from "../hooks/useSession";
 import { Navigate } from "react-router-dom";
 
 const LoginPage = () => {
-    const { user } = useUser();
+    const { session } = useSession();
 
-    return !user ? <RegisterForm /> : <Navigate to="/" />;
+    return !session ? <RegisterForm /> : <Navigate to="/" />;
 };
 
 export default LoginPage;
