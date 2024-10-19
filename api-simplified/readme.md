@@ -2,6 +2,27 @@
 
 **Deployment**: [https://depi-task-management-api-simplified.vercel.app/](https://depi-task-management-api-simplified.vercel.app/)
 
+
+# Table of Contents
+1. [Installation, Configuration, and Usage](#installation-configuration-and-usage)
+   - [Prerequisites](#prerequisites)
+   - [Cloning the Repository](#cloning-the-repository)
+   - [Installation](#installation)
+   - [Configuration](#configuration)
+   - [Running the Server](#running-the-server)
+2. [API Documentation](#api-documentation)
+   - [User Management Endpoints](#user-management-endpoints)
+     - [POST /api/user/register](#post-apiuserregister)
+     - [POST /api/user/login](#post-apiuserlogin)
+     - [DELETE /api/user](#delete-apiuser)
+   - [Task Management Endpoints](#task-management-endpoints)
+     - [GET /api/tasks](#get-apitasks)
+     - [POST /api/tasks](#post-apitasks)
+     - [GET /api/tasks/:id](#get-apitasksid)
+     - [DELETE /api/tasks/:id](#delete-apitasksid)
+     - [PUT /api/tasks/:id](#put-apitasksid)
+     - [PATCH /api/tasks/:id](#patch-apitasksid)
+
 ## Installation, Configuration, and Usage
 
 ### Prerequisites
@@ -58,7 +79,7 @@ The server should now be running, and you can access the API at `http://localhos
 
 ## API Documentation
 
-### User Managemnt Routes
+### User Management Endpoints
 
 #### POST /api/user/register
 
@@ -227,7 +248,7 @@ Deletes the authenticated user's account and all tasks associated with it.
     }
     ```
 
-### Task Managemnt Routes
+### Task Management Endpoints
 
 #### GET /api/tasks
 
@@ -610,6 +631,3 @@ PATCH https://depi-task-management-api-simplified.vercel.app/api/tasks/6713ce5ee
         "message": "Error message here"
     }
     ```
-
-    
-
