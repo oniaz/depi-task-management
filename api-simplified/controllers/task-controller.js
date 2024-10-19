@@ -4,7 +4,7 @@ const User = require('../models/user');
 const Task = require('../models/task');
 
 // expects userID in req (passed from middelware)
-// responds with all tasks created by the user (populated with users' names)
+// responds with all tasks created by the user (populated with user's name)
 const getAllTasks = async (req, res) => {
   try {
     const { userID } = req.user;
@@ -36,15 +36,9 @@ const getAllTasks = async (req, res) => {
 }
 
 // expects createBy userID in req (passed from middelware)
-// valid date formats:
-// ISO 8601 Format:
-// YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ
-// 2024-10-15 2024-10-15T14:30:00Z 
-// RFC 2822 Format: Tue, 15 Oct 2024 14:30:00 GMT
-// Unix Timestamp: 1697371800000
 // params: title (required), priority (optional, default: 'medium'), category (required)
-// sets status to  'in progress'
-// responds with created task (populated with users' names)
+// sets status to 'todo'
+// responds with created task (populated with user's name)
 const createTask = async (req, res) => {
   try {
     const { userID } = req.user;
@@ -53,11 +47,7 @@ const createTask = async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields: UserID from token' });
     }
 
-    const {
-      title,
-      priority,
-      category
-    } = req.body;
+    const { title, priority, category } = req.body;
 
     if (!title || !category) {
       return res.status(400).json({ message: 'Missing required fields: title or category' });
@@ -117,7 +107,6 @@ const getTask = async (req, res) => {
 
     const task = await Task.findOne({ _id: id, createdBy: userID })
       .populate('createdBy', 'name')
-    // .populate('assignedTo', 'name')
 
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
@@ -126,15 +115,9 @@ const getTask = async (req, res) => {
     const formattedTask = {
       id: task._id,
       title: task.title,
-      // description: task.description,
       status: task.status,
-      // dueDate: task.dueDate,
       priority: task.priority,
       category: task.category,
-      // assignedTo: {
-      //   id: task.assignedTo._id,
-      //   name: task.assignedTo.name,
-      // },
       createdBy: {
         id: task.createdBy._id,
         name: task.createdBy.name,
@@ -183,7 +166,7 @@ const deleteTask = async (req, res) => {
 // expects userID in req (passed from middelware)
 // expects task id passed as parameter :id
 // parameters to be updated: title, status, priority, category
-// responds with updated task (populated with users' names)
+// responds with updated task (populated with user's name)
 const updateTask = async (req, res) => {
   try {
     const { userID } = req.user;
@@ -203,11 +186,7 @@ const updateTask = async (req, res) => {
       return res.status(404).json({ message: 'Task not found' });
     }
 
-    // if (dueDate && isNaN(new Date(dueDate))) {
-    //   return res.status(400).json({ message: 'Invalid due date' });
-    // }
-
-    if (status && !['in progress', 'completed'].includes(status)) {
+    if (status && !['todo', 'in-progress', 'done'].includes(status)) {
       return res.status(400).json({ message: 'Invalid status' });
     }
 
@@ -254,7 +233,7 @@ const updateTask = async (req, res) => {
 
 // expects userID in req (passed from middelware)
 // expects task id passed as parameter :id
-// expects newStatus to be passed in body with value "completed" or "in progress"
+// expects newStatus to be passed in body with values "todo", "in-progress", or "done"
 // responds with updated task (populated with user's name)
 const updateTaskStatus = async (req, res) => {
   try {
@@ -275,7 +254,7 @@ const updateTaskStatus = async (req, res) => {
       return res.status(400).json({ message: 'Invalid format for task ID' });
     }
 
-    if (!['in progress', 'completed'].includes(newStatus)) {
+    if (!['todo', 'in-progress', 'done'].includes(newStatus)) {
       return res.status(400).json({ message: 'Invalid status' });
     }
 

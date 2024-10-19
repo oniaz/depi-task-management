@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 
 const User = require('../models/user');
 
-// Middleware to protect routes
-
 // to check if the user is authenticated
 // extracts the token from the request headers
 // verifies the token and passes the decoded user information to the request object
@@ -26,38 +24,13 @@ const authenticate = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    req.user = decoded;  // Add the decoded user information to the request object
+    req.user = decoded;
     next();
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// to check if the user is an admin
-// const admin = (req, res, next) => {
-//     if (req.user && req.user.role === 'admin') {
-//         next();
-//     } else {
-//         return res.status(403).json({ message: 'Not authorized as admin' });
-//     }
-// };
-
-// to check if the user has the required role 
-// const authorize = (roles) => {
-//   return async (req, res, next) => {
-//     try {
-//       if (req.user && roles.includes(req.user.role)) {
-//         next();
-//       } else {
-//         return res.status(403).json({ message: `Not authorized as ${roles.join(' or ')}` });
-//       }
-//     } catch (error) {
-//       res.status(500).json({ message: error.message });
-//     }
-//   };
-// };
-
 module.exports = {
   authenticate,
-  //  authorize
 };

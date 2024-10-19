@@ -50,7 +50,7 @@ const getAllTasks = async (req, res) => {
 // RFC 2822 Format: Tue, 15 Oct 2024 14:30:00 GMT
 // Unix Timestamp: 1697371800000
 // params: title (required), description (required), assignedTo (required), dueDate (required), priority (optional, default: 'medium'), category (required)
-// sets status to  'in progress'
+// sets status to  'in-progress'
 // responds with created task (populated with users' names)
 const createTask = async (req, res) => {
   try {
@@ -87,10 +87,7 @@ const createTask = async (req, res) => {
       description,
       assignedTo,
       createdBy: userID,
-      // // status: status || 'in progress',
-      // status,
       dueDate: new Date(dueDate),
-      // priority: priority || 'medium',
       priority,
       category
     });
@@ -235,7 +232,7 @@ const updateTask = async (req, res) => {
       return res.status(400).json({ message: 'Invalid due date' });
     }
 
-    if (status && !['in progress', 'completed'].includes(status)) {
+    if (status && !['todo', 'in-progress', 'done'].includes(status)) {
       return res.status(400).json({ message: 'Invalid status' });
     }
 
