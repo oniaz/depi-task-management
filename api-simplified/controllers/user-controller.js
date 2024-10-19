@@ -6,6 +6,9 @@ const User = require('../models/user');
 const Task = require('../models/task');
 
 
+/**
+ * Registers a new user.
+ */
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -19,7 +22,7 @@ const register = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const newUser = new User({ name, email, password: hashedPassword, role: 'employee' });
+    const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
     res.status(201).json({ message: 'User created successfully' });
@@ -47,7 +50,7 @@ const login = async (req, res) => {
       const jwtToken = jwt.sign({ userID: existingUser._id }, process.env.JWT_SECRET);
       // const token = jwt.sign({ userID: existingUser._id }, process.env.JWT_SECRET,  { expiresIn: '7d' });
 
-      return res.status(200).json({ message: 'Login successful', jwtToken, user: existingUser.name});
+      return res.status(200).json({ message: 'Login successful', jwtToken, user: existingUser.name });
     } else {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -57,9 +60,12 @@ const login = async (req, res) => {
   }
 }
 
-// deletes a user
-// deletes all tasks created by the user
-// responds with a success message
+
+
+/**
+ * Deletes a user and all associated tasks.
+ * responds with a success message
+ */
 const deleteUser = async (req, res) => {
   try {
     const { userID } = req.user;

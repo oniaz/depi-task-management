@@ -124,7 +124,7 @@ const updateTaskStatus = async (req, res) => {
       return res.status(400).json({ message: 'Invalid format for task ID' });
     }
 
-    if (!['in progress', 'completed'].includes(newStatus)) {
+    if (!['todo', 'in-progress', 'done'].includes(newStatus)) {
       return res.status(400).json({ message: 'Invalid status' });
     }
 
