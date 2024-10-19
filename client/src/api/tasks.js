@@ -11,11 +11,18 @@ export const addTask = (task) => {
 };
 
 export const changeTaskStatus = async (taskId, newStatus) => {
-    console.log("TASKID: ", taskId);
-    console.log("NEW STATUS: ", newStatus);
     const taskRes = await baseApi.patch(`/api/tasks/${taskId}`, {
         newStatus,
     });
 
     return taskRes.data;
+};
+
+export const deleteTask = (taskId) => {
+    return baseApi.delete(`/api/tasks/${taskId}`);
+};
+
+export const updateTask = (task) => {
+    const { id: taskId, ...updatedTask } = task;
+    return baseApi.put(`/api/tasks/${taskId}`, updatedTask);
 };

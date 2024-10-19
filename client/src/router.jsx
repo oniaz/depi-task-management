@@ -4,7 +4,13 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ErrorPage from "./pages/ErrorPage";
-import { addTask, changeTaskStatus, getTasks } from "./api/tasks";
+import {
+    addTask,
+    changeTaskStatus,
+    deleteTask,
+    getTasks,
+    updateTask,
+} from "./api/tasks";
 
 const tasksLoader = async () => {
     const tasks = await getTasks();
@@ -22,11 +28,11 @@ const taskAction = async ({ request }) => {
             break;
         }
         case "delete": {
-            console.log("delete");
+            await deleteTask(data.taskId);
             break;
         }
         case "edit": {
-            console.log("edit");
+            await updateTask(data);
             break;
         }
         case "mark-as": {
@@ -36,8 +42,6 @@ const taskAction = async ({ request }) => {
         default:
             console.log("idk");
     }
-
-    console.log(data);
 
     return { ok: true };
 };
