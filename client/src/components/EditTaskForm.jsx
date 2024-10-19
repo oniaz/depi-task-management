@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { editTaskFormSchema } from "../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Calendar as CalendarIcon } from "lucide-react"
+import { format } from "date-fns"
 
 import {
     Loader2,
@@ -33,6 +35,13 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFetcher } from "react-router-dom";
@@ -45,6 +54,7 @@ const EditTaskForm = ({ closeDialog, task }) => {
             status: task.status.toLowerCase(),
             priority: task.priority.toLowerCase(),
             category: task.category.toLowerCase(),
+            dueDate: task.dueDate ? task.dueDate : null,
         },
     });
 
@@ -183,6 +193,29 @@ const EditTaskForm = ({ closeDialog, task }) => {
                                     </SelectItem>
                                 </SelectContent>
                             </Select>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="dueDate"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Due Date</FormLabel>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button variant="outline" className="w-full">
+                                        <CalendarIcon />
+                                        {field.value ? format(new Date(field.value), "PPP") : "Pick a date"}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar mode="single" selected={field.value ? new Date(field.value) : null} onSelect={date => {
+                                        field.onChange(date);
+                                    }} />
+                                </PopoverContent>
+                            </Popover>
                             <FormMessage />
                         </FormItem>
                     )}
