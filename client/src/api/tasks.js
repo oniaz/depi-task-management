@@ -1,9 +1,12 @@
 import baseApi from "./base";
 
 export const getTasks = async () => {
-    const tasksRes = await baseApi.get("api/tasks");
-
-    return tasksRes.data.tasks;
+    try {
+        const tasksRes = await baseApi.get("api/tasks");
+        return tasksRes.data.tasks;
+    } catch {
+        return [];
+    }
 };
 
 export const addTask = (task) => {
