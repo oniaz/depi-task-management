@@ -19,7 +19,7 @@ import axios from "axios";
 
 const RegisterForm = () => {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); 
     const [error, setError] = useState(null);
 
     const form = useForm({
@@ -37,8 +37,14 @@ const RegisterForm = () => {
         setLoading(true); 
         setError(null); 
 
+        const requestData = {
+            name: data.fullName, 
+            email: data.email,
+            password: data.password,
+        };
+
         try {
-            const response = await axios.post('http://localhost:5000/register', data);
+            const response = await axios.post('https://depi-task-management-api-simplified.vercel.app/api/user/register', requestData);
             console.log('Registration successful:', response.data);
             alert('Registered successfully!'); 
             navigate("/login");
@@ -56,11 +62,8 @@ const RegisterForm = () => {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="mx-auto mt-8 w-full md:w-8/12 lg:w-6/12 space-y-4 bg-card p-8 rounded-lg border border-gray-800"
             >
-                <h1 className="text-2xl font-bold mb-4 text-foreground">
-                    Register
-                </h1>
+                <h1 className="text-2xl font-bold mb-4 text-foreground">Register</h1>
 
-                {/* Full Name */}
                 <FormField
                     control={form.control}
                     name="fullName"
@@ -75,7 +78,6 @@ const RegisterForm = () => {
                     )}
                 />
 
-                {/* Email */}
                 <FormField
                     control={form.control}
                     name="email"
@@ -93,7 +95,6 @@ const RegisterForm = () => {
                     )}
                 />
 
-                {/* Password */}
                 <FormField
                     control={form.control}
                     name="password"
@@ -112,7 +113,6 @@ const RegisterForm = () => {
                     )}
                 />
 
-                {/* Confirm Password */}
                 <FormField
                     control={form.control}
                     name="confirmPassword"
@@ -131,19 +131,16 @@ const RegisterForm = () => {
                     )}
                 />
 
-                {/* Error Message */}
                 {error && (
                     <div className="text-red-500 text-sm">{error}</div>
                 )}
 
-                {/* Register Button */}
                 <div>
                     <Button type="submit" className="mt-8 w-full" disabled={loading}>
                         {loading ? 'Registering...' : 'Register'}
                     </Button>
                 </div>
 
-                {/* Already Registered Link */}
                 <div className="mt-4 text-center">
                     <p className="text-sm text-muted-foreground">
                         Already have an account?{" "}

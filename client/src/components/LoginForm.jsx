@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FaGoogle } from "react-icons/fa";
 import {
     Form,
     FormField,
@@ -11,15 +10,20 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../schemas";
-import { Link } from "react-router-dom";
+import { z } from "zod";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
-import useSession from "../hooks/useSession";
+
+const loginSchema = z.object({
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters long"),
+});
 
 const LoginForm = () => {
-    const { login } = useSession();
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
     const form = useForm({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -29,15 +33,22 @@ const LoginForm = () => {
     });
 
     const onSubmit = async (data) => {
-        setLoading(true); 
+        setLoading(true);
+
         try {
-            const response = await axios.post('http://localhost:5000/login', {
-                username: data.email,
-                password: data.password,
-            });
-            const token = response.data.token;
-            login(token);
+            const response = await axios.post(
+                'https://depi-task-management-api-simplified.vercel.app/api/user/login',
+                {
+                    email: data.email,
+                    password: data.password,
+                }
+            );
+
+            const token = response.data.jwtToken;
+
+            sessionStorage.setItem("token", token);
             alert('Logged in successfully!');
+            navigate("/");
         } catch (error) {
             console.error('Login failed:', error);
             alert('Login failed. Please check your credentials.');
@@ -46,21 +57,14 @@ const LoginForm = () => {
         }
     };
 
-    const handleGoogleLogin = () => {
-        console.log("Login with Google");
-    };
-
     return (
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="mx-auto mt-8 w-full md:w-8/12 lg:w-6/12 space-y-4 bg-card p-8 rounded-lg border border-gray-800"
             >
-                <h1 className="text-2xl font-bold mb-4 text-foreground">
-                    Login
-                </h1>
+                <h1 className="text-2xl font-bold mb-4 text-foreground">Login</h1>
 
-                {/* Email Field */}
                 <FormField
                     control={form.control}
                     name="email"
@@ -79,7 +83,6 @@ const LoginForm = () => {
                     )}
                 />
 
-                {/* Password Field */}
                 <FormField
                     control={form.control}
                     name="password"
@@ -101,24 +104,12 @@ const LoginForm = () => {
 
                 <div className="flex flex-col">
                     <div className="mt-8 space-y-4">
-                        {/* Login Button */}
                         <Button className="w-full" type="submit" disabled={loading}>
                             {loading ? 'Logging in...' : 'Login'}
-                        </Button>
-
-                        {/* Login with Google Button */}
-                        <Button
-                            className="w-full"
-                            variant="outline"
-                            onClick={handleGoogleLogin}
-                        >
-                            <FaGoogle className="mr-1 mt-0.5" />
-                            Login with Google
                         </Button>
                     </div>
                 </div>
 
-                {/* Register Link */}
                 <div className="mt-4 text-center">
                     <p className="text-sm text-muted-foreground">
                         Don&apos;t have an account?{" "}
