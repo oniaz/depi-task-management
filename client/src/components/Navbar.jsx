@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import useSession from "../hooks/useSession";
 
 const Navbar = () => {
-    const { session } = useSession();
+    const { session, logout } = useSession();
+
+    const handleLogout = () => {
+        logout();
+    };
 
     return (
         <header className="container px-2 md:px-4 my-6 mx-auto flex justify-between items-center">
@@ -12,10 +16,12 @@ const Navbar = () => {
                 <Link to="/">Tasks</Link>
             </h1>
             <div className="flex items-center gap-4">
-                {/* Conditionally Render based on user logged in or not*/}
+                {/* Conditionally Render based on user logged in or not */}
                 {session ? (
                     <>
-                        <Button variant="ghost">Logout</Button>
+                        <Button variant="ghost" onClick={handleLogout}>
+                            Logout
+                        </Button>
                         <div className="h-8 w-px bg-gray-800 inline-block" />
                         <AddTaskDialog />
                     </>

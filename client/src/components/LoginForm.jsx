@@ -10,30 +10,25 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Link, useNavigate } from "react-router-dom";
+import { loginSchema } from "../schemas";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
-
-const loginSchema = z.object({
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters long"),
-});
+import useSession from "../hooks/useSession";
 
 const LoginForm = () => {
+    const { login } = useSession();
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
-
+    const [error, setError] = useState(null);
+    
     const form = useForm({
         resolver: zodResolver(loginSchema),
-        defaultValues: {
-            email: "",
-            password: "",
-        },
+        defaultValues: { email: "", password: "" },
     });
 
     const onSubmit = async (data) => {
         setLoading(true);
+        setError(null);
 
         try {
             const response = await axios.post(
@@ -43,15 +38,14 @@ const LoginForm = () => {
                     password: data.password,
                 }
             );
-
-            const token = response.data.jwtToken;
-
-            sessionStorage.setItem("token", token);
+            login(response.data.jwtToken);
             alert('Logged in successfully!');
-            navigate("/");
         } catch (error) {
-            console.error('Login failed:', error);
-            alert('Login failed. Please check your credentials.');
+            const message = error.response?.data?.message;
+            setError(message === "User not found" || message === "Invalid credentials" 
+                ? "The email or password you entered is incorrect." 
+                : "Something went wrong. Please try again later."
+            );
         } finally {
             setLoading(false);
         }
@@ -102,13 +96,11 @@ const LoginForm = () => {
                     )}
                 />
 
-                <div className="flex flex-col">
-                    <div className="mt-8 space-y-4">
-                        <Button className="w-full" type="submit" disabled={loading}>
-                            {loading ? 'Logging in...' : 'Login'}
-                        </Button>
-                    </div>
-                </div>
+                {error && <div className="text-red-500 text-sm">{error}</div>}
+
+                <Button className="w-full" type="submit" disabled={loading}>
+                    {loading ? 'Logging in...' : 'Login'}
+                </Button>
 
                 <div className="mt-4 text-center">
                     <p className="text-sm text-muted-foreground">

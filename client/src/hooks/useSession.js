@@ -6,13 +6,13 @@ const useSession = () => {
 
     if (!values) {
         throw new Error(
-            "Must be inside of a provider to access the user context"
+            "Must be inside of a provider to access the session context"
         );
     }
 
-    const { session, setSession } = values;
+    const { session, login, logout } = values;
 
-    return { session, setSession };
+    return { session, login, logout };
 };
 
 export default useSession;

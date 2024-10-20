@@ -19,17 +19,17 @@ import axios from "axios";
 
 const RegisterForm = () => {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false); 
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const form = useForm({
         resolver: zodResolver(registerSchema),
         defaultValues: {
-            fullName: "",
+            name: "",
             email: "",
             password: "",
             confirmPassword: "",
-            role: "user", 
+            // role: "user", 
         },
     });
 
@@ -37,20 +37,36 @@ const RegisterForm = () => {
         setLoading(true); 
         setError(null); 
 
-        const requestData = {
-            name: data.fullName, 
+
+        const registrationData = {
+            name: data.name,
             email: data.email,
             password: data.password,
         };
 
         try {
-            const response = await axios.post('https://depi-task-management-api-simplified.vercel.app/api/user/register', requestData);
+            const response = await axios.post('https://depi-task-management-api-simplified.vercel.app/api/user/register', registrationData);
             console.log('Registration successful:', response.data);
             alert('Registered successfully!'); 
             navigate("/login");
         } catch (error) {
             console.error('Registration failed:', error);
-            setError(error.response?.data?.message || 'Registration failed'); 
+            // Handle specific error messages based on API response
+            if (error.response) {
+                const status = error.response.status;
+                const message = error.response.data.message || 'Registration failed';
+                
+                if (status === 400) {
+                    setError(message);
+                } else if (status === 500) {
+                    setError('Server error. Please try again later.');
+                } else {
+                    setError('An unexpected error occurred.');
+                }
+            } else {
+                // Handle network errors or if no response was received
+                setError('Network error. Please check your connection.');
+            }
         } finally {
             setLoading(false); 
         }
@@ -66,7 +82,7 @@ const RegisterForm = () => {
 
                 <FormField
                     control={form.control}
-                    name="fullName"
+                    name="name"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Full Name</FormLabel>
