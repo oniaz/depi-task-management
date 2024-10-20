@@ -2,8 +2,9 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { editTaskFormSchema } from "../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar as CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 import {
     Loader2,
@@ -24,6 +25,7 @@ import {
     FormItem,
     FormLabel,
     FormControl,
+    FormDescription,
     FormMessage,
 } from "@/components/ui/form";
 
@@ -201,21 +203,46 @@ const EditTaskForm = ({ closeDialog, task }) => {
                     control={form.control}
                     name="dueDate"
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="flex flex-col">
                             <FormLabel>Due Date</FormLabel>
                             <Popover>
                                 <PopoverTrigger asChild>
-                                    <Button variant="outline" className="w-full">
-                                        <CalendarIcon />
-                                        {field.value ? format(new Date(field.value), "PPP") : "Pick a date"}
-                                    </Button>
+                                    <FormControl>
+                                        <Button
+                                            variant="outline"
+                                            className={cn(
+                                                "w-full pl-3 text-left font-normal",
+                                                !field.value &&
+                                                    "text-muted-foreground"
+                                            )}
+                                        >
+                                            {field.value ? (
+                                                format(
+                                                    new Date(field.value),
+                                                    "PPP"
+                                                )
+                                            ) : (
+                                                <span>Pick a date</span>
+                                            )}
+                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                        </Button>
+                                    </FormControl>
                                 </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0">
-                                    <Calendar mode="single" selected={field.value ? new Date(field.value) : null} onSelect={date => {
-                                        field.onChange(date);
-                                    }} />
+                                <PopoverContent
+                                    className="w-auto p-0"
+                                    align="start"
+                                >
+                                    <Calendar
+                                        mode="single"
+                                        selected={field.value}
+                                        onSelect={field.onChange}
+                                        disabled={(date) => date < new Date()}
+                                    />
                                 </PopoverContent>
                             </Popover>
+                            <FormDescription>
+                                The date should the task be completed by
+                            </FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
