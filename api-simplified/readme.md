@@ -209,10 +209,6 @@ The following fields should be passed in the request body as JSON:
 ##### Notes
 - A JWT token is returned upon successful login, which should be included in subsequent requests for endpoints that require authentication.
 
-Here’s the documentation for the `DELETE /` endpoint:
-
-
-
 #### DELETE /api/user
 
 ##### Endpoint
