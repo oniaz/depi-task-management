@@ -48,9 +48,9 @@ const HomePage = () => {
 
     return session ? (
         isLoading ? (
-            <LoaderCircle className="h-32 w-32 mx-auto my-48 animate-spin" />
+            <LoaderCircle className="h-24 w-24 mx-auto my-48 animate-spin" />
         ) : (
-            <TasksTable columns={columnsWithFetcher} data={TEST_TASKS} />
+            <TasksTable columns={columnsWithFetcher} data={tasks} />
         )
     ) : (
         <Navigate to="/login" />

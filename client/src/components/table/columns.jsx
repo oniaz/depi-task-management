@@ -38,22 +38,55 @@ import EditTaskForm from "../EditTaskForm";
 
 import { capitalize } from "../../lib/utils";
 import { useState } from "react";
+import {
+    CaretDownIcon,
+    CaretSortIcon,
+    CaretUpIcon,
+} from "@radix-ui/react-icons";
 
 export const columns = (fetcher) => [
     {
         accessorKey: "title",
         header: ({ column }) => (
-          <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Title
-          </button>
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                Title
+                <span className="font-bold text-xl">
+                    {column.getIsSorted() === "desc" ? (
+                        <CaretDownIcon />
+                    ) : column.getIsSorted() === "asc" ? (
+                        <CaretUpIcon />
+                    ) : (
+                        <CaretSortIcon />
+                    )}
+                </span>
+            </Button>
         ),
     },
     {
         accessorKey: "status",
         header: ({ column }) => (
-          <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Status
-          </button>
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                Status
+                <span className="font-bold text-xl">
+                    {column.getIsSorted() === "desc" ? (
+                        <CaretDownIcon />
+                    ) : column.getIsSorted() === "asc" ? (
+                        <CaretUpIcon />
+                    ) : (
+                        <CaretSortIcon />
+                    )}
+                </span>
+            </Button>
         ),
         cell: ({ getValue }) => {
             const status = capitalize(getValue());
@@ -70,9 +103,23 @@ export const columns = (fetcher) => [
     {
         accessorKey: "priority",
         header: ({ column }) => (
-          <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Priority
-          </button>
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                Priority
+                <span className="font-bold text-xl">
+                    {column.getIsSorted() === "desc" ? (
+                        <CaretDownIcon />
+                    ) : column.getIsSorted() === "asc" ? (
+                        <CaretUpIcon />
+                    ) : (
+                        <CaretSortIcon />
+                    )}
+                </span>
+            </Button>
         ),
         cell: ({ getValue }) => {
             const priority = capitalize(getValue());
@@ -88,10 +135,24 @@ export const columns = (fetcher) => [
     },
     {
         accessorKey: "category",
-       header: ({ column }) => (
-          <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Category
-          </button>
+        header: ({ column }) => (
+            <Button
+                variant="ghost"
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                Category
+                <span className="font-bold text-xl">
+                    {column.getIsSorted() === "desc" ? (
+                        <CaretDownIcon />
+                    ) : column.getIsSorted() === "asc" ? (
+                        <CaretUpIcon />
+                    ) : (
+                        <CaretSortIcon />
+                    )}
+                </span>
+            </Button>
         ),
         cell: ({ getValue }) => {
             const category = capitalize(getValue());
@@ -108,9 +169,13 @@ export const columns = (fetcher) => [
     {
         accessorKey: "dueDate",
         header: ({ column }) => (
-          <button onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Due Date
-          </button>
+            <button
+                onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                }
+            >
+                Due Date
+            </button>
         ),
         cell: ({ getValue }) => {
             const dueDate = new Date(getValue());
@@ -129,7 +194,10 @@ export const columns = (fetcher) => [
             const [isEditDialogOpen, setIsEditDialogOpen] = useState();
 
             return (
-                <Dialog open={isEditDialogOpen}>
+                <Dialog
+                    open={isEditDialogOpen}
+                    onOpenChange={setIsEditDialogOpen}
+                >
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button

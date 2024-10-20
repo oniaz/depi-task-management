@@ -21,8 +21,12 @@ const AddTaskDialog = () => {
         setDialogOpen(false);
     };
 
+    const toggleDialog = () => {
+        setDialogOpen((prev) => !prev);
+    };
+
     return (
-        <Dialog open={dialogOpen}>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
                 <Button onClick={openDialog}>
                     <span className="mr-2 text-xl font-bold">+</span>
