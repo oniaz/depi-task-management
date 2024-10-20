@@ -3,7 +3,7 @@
 **Deployment**: [https://depi-task-management-api-simplified.vercel.app/](https://depi-task-management-api-simplified.vercel.app/)
 
 
-# Table of Contents
+## Table of Contents
 1. [Installation, Configuration, and Usage](#installation-configuration-and-usage)
    - [Prerequisites](#prerequisites)
    - [Cloning the Repository](#cloning-the-repository)
@@ -280,6 +280,7 @@ Retrieves all tasks created by the authenticated user.
                 "status": "in-progress",
                 "priority": "high",
                 "category": "Work",
+                "dueDate": "2024-10-20T00:00:00.000Z",
                 "createdBy": {
                     "id": "64a7b2e84f4d2b8a9f7e1d22",
                     "name": "Alice Johnson"
@@ -291,6 +292,7 @@ Retrieves all tasks created by the authenticated user.
                 "status": "done",
                 "priority": "medium",
                 "category": "Personal",
+                "dueDate": "2024-10-18T00:00:00.000Z",
                 "createdBy": {
                     "id": "64a7b2e84f4d2b8a9f7e1d22",
                     "name": "Alice Johnson"
@@ -309,7 +311,7 @@ Retrieves all tasks created by the authenticated user.
     ```
 
 ##### Notes
-- The tasks are returned in an array, each containing details such as `id`, `title`, `status`, `priority`, `category`, and the `createdBy` user with their `id` and `name`.
+- The tasks are returned in an array, each containing details such as `id`, `title`, `status`, `priority`, `category`, dueDate, and the `createdBy` user with their `id` and `name`.
 - The tasks are filtered based on the `userID` extracted from the JWT token.
 
 
@@ -332,13 +334,18 @@ The request body must be in JSON format and include the following fields:
 - **title**: The title of the task (required) - string.
 - **priority**: The priority of the task (optional, default is 'medium') - string; possible values are `low`, `medium`, `high`.
 - **category**: The category of the task (required) - string.
+- **dueDate**: The due date of the task (required). It should be in one of the following valid date formats:  
+  - ISO 8601: `YYYY-MM-DD` or `YYYY-MM-DDTHH:mm:ssZ`
+  - RFC 2822: `Tue, 15 Oct 2024 14:30:00 GMT`
+  - Unix Timestamp: `1697371800000`
 
 ###### Example Request Body
 ```json
 {
     "title": "DEPI final project",
     "priority": "medium",
-    "category": "A simple task that I can finish quickly."
+    "category": "A simple task that I can finish quickly.",
+    "dueDate": "2024-10-20"
 }
 ```
 
@@ -353,6 +360,7 @@ The request body must be in JSON format and include the following fields:
             "status": "todo",
             "priority": "medium",
             "category": "A simple task that I can finish quickly.",
+            "dueDate": "2024-10-20T00:00:00.000Z",
             "createdBy": {
                 "id": "user_id_here",
                 "name": "User Name"
@@ -364,7 +372,7 @@ The request body must be in JSON format and include the following fields:
 - **400 Bad Request**: Missing required fields or invalid priority.
     ```json
     {
-        "message": "Missing required fields: title or category"
+        "message": "Missing required fields: title, category, or dueDate"
     }
     ```
 
@@ -407,6 +415,7 @@ GET https://depi-task-management-api-simplified.vercel.app/api/tasks/6713c79902c
             "status": "todo",
             "priority": "medium",
             "category": "Sample Category",
+            "dueDate": "2024-10-18T00:00:00.000Z",
             "createdBy": {
                 "id": "user_id_here",
                 "name": "User Name"
@@ -507,6 +516,10 @@ Updates a specific task by its ID.
 - **status**: The status of the task (optional, must be one of: `todo`, `in-progress`, `done`).
 - **priority**: The priority of the task (optional, must be one of: `low`, `medium`, `high`).
 - **category**: The category of the task (optional).
+- **dueDate**: The due date of the task (optional). must be in one of the following valid date formats:  
+  - ISO 8601: `YYYY-MM-DD` or `YYYY-MM-DDTHH:mm:ssZ`
+  - RFC 2822: `Tue, 15 Oct 2024 14:30:00 GMT`
+  - Unix Timestamp: `1697371800000`
 
 ###### Example Request
 ```
@@ -518,7 +531,8 @@ PUT https://depi-task-management-api-simplified.vercel.app/api/tasks/6713c79902c
 {
     "title": "DEPI final project: task management system",
     "category": "Final Project",
-    "priority": "high"
+    "priority": "high",
+    "dueDate": "2024-10-20"
 }
 ```
 
@@ -533,6 +547,7 @@ PUT https://depi-task-management-api-simplified.vercel.app/api/tasks/6713c79902c
             "status": "todo",
             "priority": "high",
             "category": "Final Project",
+            "dueDate": "2024-10-20T00:00:00.000Z",
             "createdBy": {
                 "id": "670d82a993d59dafa98532b6",
                 "name": "User Name"

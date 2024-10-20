@@ -22,6 +22,7 @@ const getAllTasks = async (req, res) => {
       status: task.status,
       priority: task.priority,
       category: task.category,
+      dueDate: task.dueDate,
       createdBy: {
         id: task.createdBy._id,
         name: task.createdBy.name
@@ -36,7 +37,13 @@ const getAllTasks = async (req, res) => {
 }
 
 // expects createBy userID in req (passed from middelware)
-// params: title (required), priority (optional, default: 'medium'), category (required)
+// params: title (required), priority (optional, default: 'medium'), category (required), dueDate (required)
+// valid date formats:
+// ISO 8601 Format:
+// YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ
+// 2024-10-15 2024-10-15T14:30:00Z 
+// RFC 2822 Format: Tue, 15 Oct 2024 14:30:00 GMT
+// Unix Timestamp: 1697371800000
 // sets status to 'todo'
 // responds with created task (populated with user's name)
 const createTask = async (req, res) => {
@@ -47,21 +54,26 @@ const createTask = async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields: UserID from token' });
     }
 
-    const { title, priority, category } = req.body;
+    const { title, priority, category, dueDate } = req.body;
 
-    if (!title || !category) {
-      return res.status(400).json({ message: 'Missing required fields: title or category' });
+    if (!title || !category || !dueDate) {
+      return res.status(400).json({ message: 'Missing required fields: title, category, or dueDate' });
     }
 
     if (priority && !['low', 'medium', 'high'].includes(priority)) {
       return res.status(400).json({ message: 'Invalid priority' });
     }
 
+    if (isNaN(new Date(dueDate))) {
+      return res.status(400).json({ message: 'Invalid due date' });
+    }
+
     const newTask = new Task({
       title,
       createdBy: userID,
       priority,
-      category
+      category,
+      dueDate: new Date(dueDate)
     });
 
     await newTask.save();
@@ -75,6 +87,7 @@ const createTask = async (req, res) => {
       status: updatedTask.status,
       priority: updatedTask.priority,
       category: updatedTask.category,
+      dueDate: updatedTask.dueDate,
       createdBy: {
         id: updatedTask.createdBy._id,
         name: updatedTask.createdBy.name,
@@ -118,6 +131,7 @@ const getTask = async (req, res) => {
       status: task.status,
       priority: task.priority,
       category: task.category,
+      dueDate: task.dueDate,
       createdBy: {
         id: task.createdBy._id,
         name: task.createdBy.name,
@@ -165,7 +179,7 @@ const deleteTask = async (req, res) => {
 
 // expects userID in req (passed from middelware)
 // expects task id passed as parameter :id
-// parameters to be updated: title, status, priority, category
+// parameters that can be updated: title, status, priority, category, dueDate
 // responds with updated task (populated with user's name)
 const updateTask = async (req, res) => {
   try {
@@ -176,14 +190,21 @@ const updateTask = async (req, res) => {
     }
 
     const { id } = req.params;
-    const { title,
+    const {
+      title,
       status,
       priority,
-      category } = req.body;
+      category,
+      dueDate
+    } = req.body;
 
     const task = await Task.findOne({ _id: id, createdBy: userID })
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
+    }
+
+    if (dueDate && isNaN(new Date(dueDate))) {
+      return res.status(400).json({ message: 'Invalid due date' });
     }
 
     if (status && !['todo', 'in-progress', 'done'].includes(status)) {
@@ -199,6 +220,7 @@ const updateTask = async (req, res) => {
       status,
       priority,
       category,
+      dueDate: dueDate ? new Date(dueDate) : undefined,
     };
 
     Object.keys(updates).forEach(field => {
@@ -218,6 +240,7 @@ const updateTask = async (req, res) => {
       status: updatedTask.status,
       priority: updatedTask.priority,
       category: updatedTask.category,
+      dueDate: updatedTask.dueDate,
       createdBy: {
         id: updatedTask.createdBy._id,
         name: updatedTask.createdBy.name,
