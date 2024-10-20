@@ -13,8 +13,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../schemas";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import useSession from "../hooks/useSession";
 
 const LoginForm = () => {
+    const { login } = useSession();
+    const [loading, setLoading] = useState(false);
     const form = useForm({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -23,8 +28,22 @@ const LoginForm = () => {
         },
     });
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        setLoading(true); 
+        try {
+            const response = await axios.post('http://localhost:5000/login', {
+                username: data.email,
+                password: data.password,
+            });
+            const token = response.data.token;
+            login(token);
+            alert('Logged in successfully!');
+        } catch (error) {
+            console.error('Login failed:', error);
+            alert('Login failed. Please check your credentials.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleGoogleLogin = () => {
@@ -52,6 +71,7 @@ const LoginForm = () => {
                                 <Input
                                     placeholder="you@example.com"
                                     {...field}
+                                    aria-required
                                 />
                             </FormControl>
                             <FormMessage />
@@ -71,6 +91,7 @@ const LoginForm = () => {
                                     type="password"
                                     placeholder="Enter your password"
                                     {...field}
+                                    aria-required
                                 />
                             </FormControl>
                             <FormMessage />
@@ -81,8 +102,8 @@ const LoginForm = () => {
                 <div className="flex flex-col">
                     <div className="mt-8 space-y-4">
                         {/* Login Button */}
-                        <Button className="w-full" type="submit">
-                            Login
+                        <Button className="w-full" type="submit" disabled={loading}>
+                            {loading ? 'Logging in...' : 'Login'}
                         </Button>
 
                         {/* Login with Google Button */}

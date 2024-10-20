@@ -12,11 +12,16 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "../schemas";
+import { registerSchema } from "../schemas"; 
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 const RegisterForm = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
     const form = useForm({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -24,12 +29,25 @@ const RegisterForm = () => {
             email: "",
             password: "",
             confirmPassword: "",
-            role: "user", // Default role
+            role: "user", 
         },
     });
 
-    const onSubmit = (data) => {
-        console.log(data); // Replace this with your registration API call logic
+    const onSubmit = async (data) => {
+        setLoading(true); 
+        setError(null); 
+
+        try {
+            const response = await axios.post('http://localhost:5000/register', data);
+            console.log('Registration successful:', response.data);
+            alert('Registered successfully!'); 
+            navigate("/login");
+        } catch (error) {
+            console.error('Registration failed:', error);
+            setError(error.response?.data?.message || 'Registration failed'); 
+        } finally {
+            setLoading(false); 
+        }
     };
 
     return (
@@ -113,10 +131,15 @@ const RegisterForm = () => {
                     )}
                 />
 
+                {/* Error Message */}
+                {error && (
+                    <div className="text-red-500 text-sm">{error}</div>
+                )}
+
                 {/* Register Button */}
                 <div>
-                    <Button type="submit" className="mt-8 w-full">
-                        Register
+                    <Button type="submit" className="mt-8 w-full" disabled={loading}>
+                        {loading ? 'Registering...' : 'Register'}
                     </Button>
                 </div>
 
