@@ -1,13 +1,19 @@
 # 📝 DEPI Task Management
 
-Welcome to DEPI Task Management! This project is a task management system designed to help users manage and track their tasks efficiently, making teamwork easier and more organized.
+Welcome to DEPI Task Management! This project is a task management system designed to help users manage and track their tasks efficiently.
 
 ## 🚀 Features
 
-- 📋 **Task Creation & Management:** Easily create tasks and assign them to team members.
-- ✔️ **Progress Tracking:** Track the progress of tasks and update their status in real-time.
-- 👥 **Team Collaboration:** Assign tasks to individuals or teams and work collaboratively.
-- 📅 **Deadline Management:** Set deadlines for tasks and get reminders to ensure timely completion.
+- 📋 **Task Creation & Management:** Easily create tasks with the following fields:
+  - **Title**
+  - **Status** (To Do, In Progress, Done)
+  - **Priority** (Low, Medium, High)
+  - **Category**
+  - **Due Date**
+- ✔️ **Status Tracking:** Mark tasks with their status.
+- 🔍 **Search by Title:** Quickly find tasks by searching for their titles.
+- 🔄 **Sorting Options:** Sort tasks by any of the fields listed above.
+
 ## 🔨 Built With
 
 -   **React** - Frontend library for building user interfaces.
