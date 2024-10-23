@@ -124,13 +124,25 @@ export const columns = (fetcher) => [
         cell: ({ getValue }) => {
             const priority = capitalize(getValue());
             const PriorityIcon = getPriorityIcon(priority);
-
+    
             return (
                 <span className="flex gap-2 items-center">
                     <PriorityIcon />
                     {priority}
                 </span>
             );
+        },
+        sortingFn: (rowA, rowB) => {
+            const priorityLevels = {
+                low: 1,
+                medium: 2,
+                high: 3,
+            };
+    
+            const priorityA = priorityLevels[rowA.getValue("priority").toLowerCase()] || 0;
+            const priorityB = priorityLevels[rowB.getValue("priority").toLowerCase()] || 0;
+    
+            return priorityA - priorityB;
         },
     },
     {
