@@ -23,7 +23,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/tasks", taskRoutes);
 
 app.get("/", (req, res) => {
-    res.send("Super ultra mega simplified version of the ask Management System API is up and running... >:(");
+    res.send("Task Management System API (simplified version) is up and running...");
 });
 
 app.use((req, res) => {
