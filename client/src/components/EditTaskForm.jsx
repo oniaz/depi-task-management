@@ -56,7 +56,7 @@ const EditTaskForm = ({ closeDialog, task }) => {
             status: task.status.toLowerCase(),
             priority: task.priority.toLowerCase(),
             category: task.category.toLowerCase(),
-            dueDate: task.dueDate ? task.dueDate : null,
+            dueDate: task.dueDate ? new Date(task.dueDate) : null,
         },
     });
 

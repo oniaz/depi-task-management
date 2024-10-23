@@ -8,7 +8,7 @@ export const addTaskFormSchema = z.object({
         .or(z.literal("school"))
         .or(z.literal("work")),
     dueDate: z.date({
-        required_error: "A date of birth is required.",
+        required_error: "A due date is required.",
     }),
 });
 
@@ -24,7 +24,7 @@ export const editTaskFormSchema = z.object({
         .or(z.literal("school"))
         .or(z.literal("work")),
     dueDate: z.date({
-        required_error: "A date of birth is required.",
+        required_error: "A due date is required.",
     }),
 });
 
